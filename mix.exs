@@ -3,7 +3,7 @@ defmodule Topo.Mixfile do
 
   def project do
     [app: :topo,
-     version: "0.0.1",
+     version: "0.1.1",
      elixir: "~> 1.2",
      description: description,
      package: package,
@@ -38,7 +38,7 @@ defmodule Topo.Mixfile do
 
   defp package do
     [
-      files: ["lib", "mix.exs", "README*"],
+      files: ["lib/topo.ex", "lib/topo", "mix.exs", "README*"],
       maintainers: ["Powell Kinney"],
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/pkinney/topo"}
