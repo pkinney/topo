@@ -1,4 +1,6 @@
 defmodule Topo.LineLine do
+  @moduledoc false
+  
   alias Topo.Util
 
   def relate(a, b) do

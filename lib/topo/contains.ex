@@ -1,4 +1,6 @@
 defmodule Topo.Contains do
+  @moduledoc false
+  
   import Topo.Intersects
 
   alias Topo.PointRing

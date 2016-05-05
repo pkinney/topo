@@ -1,4 +1,6 @@
 defmodule Topo.RingRing do
+  @moduledoc false
+  
   alias Topo.Util
   alias Topo.PointRing
 

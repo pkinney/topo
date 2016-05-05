@@ -1,4 +1,6 @@
 defmodule Topo.Intersects do
+  @moduledoc false
+  
   alias Topo.PointLine
   alias Topo.PointRing
   alias Topo.LineLine

@@ -1,4 +1,6 @@
 defmodule Topo.Cleaner do
+  @moduledoc false
+  
   import Topo.Util
 
   def clean({x, y}), do: %Geo.Point{coordinates: {x, y}}

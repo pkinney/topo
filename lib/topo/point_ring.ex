@@ -1,4 +1,6 @@
 defmodule Topo.PointRing do
+  @moduledoc false
+  
   def relate(ring, {px, py}) do
     ring = for {x, y} <- ring, do: {x - px, y - py}
 

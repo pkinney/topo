@@ -1,4 +1,6 @@
 defmodule Mix.Tasks.Validation.Gen do
+  @moduledoc false
+  
   use Mix.Task
 
   @shortdoc "Generates the ExUnit tests to cover the validation suite"

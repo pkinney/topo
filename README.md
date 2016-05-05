@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/pkinney/topo.svg?branch=master)](https://travis-ci.org/pkinney/topo)
 [![Hex.pm](https://img.shields.io/hexpm/v/topo.svg)](https://hex.pm/packages/topo)
 
-A Geometry library for Elixir that calculates relationships between two
+A Geometry library for Elixir that calculates spatial relationships between two
 geometries.  Geometries can be of any of the following types:
 
 * Point

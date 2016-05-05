@@ -1,4 +1,6 @@
 defmodule Topo.PointLine do
+  @moduledoc false
+  
   def relate([_], _), do: :disjoint
   def relate([a, b | rest], p) do
     cond do

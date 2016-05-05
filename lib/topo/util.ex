@@ -1,4 +1,6 @@
 defmodule Topo.Util do
+  @moduledoc false
+  
   def cross({ax, ay}, {bx, by}, {cx, cy}) do
     Vector.cross({ax - cx, ay - cy}, {bx - cx, by - cy})
     |> Vector.component(:z)
