@@ -14,7 +14,7 @@ defmodule Topo.Mixfile do
   end
 
   def application do
-    [applications: [:logger]]
+    [applications: [:logger, :geo, :seg_seg, :vector]]
   end
 
   defp deps do
