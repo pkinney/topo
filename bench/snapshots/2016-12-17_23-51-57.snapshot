@@ -1,6 +1,0 @@
-duration:1.0;mem stats:false;sys mem stats:false
-module;test;tags;iterations;elapsed
-PointPolygonBench	MultiPoint / Polygon intersects		50000	3161440
-PointPolygonBench	Point / Polygon intersects		1000	2372649
-PointPolygonBench	Polygon / MultiPoint contains		10000	1187429
-PointPolygonBench	Polygon / Polygon equal		500	3705236
