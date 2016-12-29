@@ -1,0 +1,4 @@
+duration:1.0;mem stats:false;sys mem stats:false
+module;test;tags;iterations;elapsed
+PointPolygonBench	Counties in States with Envelope check		2000	1893982
+PointPolygonBench	Polygon / Polygon equal		200	1484087

@@ -25,6 +25,7 @@ defmodule Topo.Mixfile do
       {:poison, "~> 2.0", only: [:test, :dev]},
       {:benchfella, "~> 0.3.0", only: :dev},
       {:excoveralls, "~> 0.4", only: :test},
+      {:envelope, "~> 0.2", only: :dev},
       {:earmark, "~> 0.1", only: :dev},
       {:ex_doc, "~> 0.11", only: :dev}
     ]

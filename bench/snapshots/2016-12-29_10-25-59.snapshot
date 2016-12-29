@@ -1,0 +1,4 @@
+duration:1.0;mem stats:false;sys mem stats:false
+module;test;tags;iterations;elapsed
+PointPolygonBench	Counties in States		500	1703627
+PointPolygonBench	Polygon / Polygon equal		500	3701528
