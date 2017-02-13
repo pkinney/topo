@@ -1,15 +1,15 @@
-defmodule PointPolygonBench do
+defmodule PolygonPolygonBench do
   use Benchfella
   import Topo
 
-  @states Path.join([ "bench", "shapes", "states20m.json" ])
+  @states Path.join([ "bench", "shapes", "states.json" ])
     |> File.read!
     |> Poison.decode!
     |> Map.fetch!("features")
     |> Enum.map(&(&1["geometry"]))
     |> Enum.map(&Geo.JSON.decode/1)
 
-  @counties Path.join([ "bench", "shapes", "counties20m.json" ])
+  @counties Path.join([ "bench", "shapes", "counties.json" ])
     |> File.read!
     |> Poison.decode!
     |> Map.fetch!("features")
@@ -27,14 +27,16 @@ defmodule PointPolygonBench do
     [state] = Enum.take_random(@states, 1)
     [county] = Enum.take_random(@counties, 1)
     Topo.intersects?(state, county)
+    :ok
   end
 
   bench "Counties in States with Envelope check" do
     [state] = Enum.take_random(@states, 1)
     [county] = Enum.take_random(@counties, 1)
-    case Envelope.intersect?(Envelope.from_geo(state), Envelope.from_geo(county)) do
+    case Envelope.intersects?(Envelope.from_geo(state), Envelope.from_geo(county)) do
       true -> Topo.intersects?(state, county)
       false -> false
     end
+    :ok
   end
 end
