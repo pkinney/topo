@@ -10,6 +10,7 @@ defmodule Topo.Mixfile do
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      test_coverage: [tool: ExCoveralls],
+     dialyzer: [plt_add_apps: [:poison, :mix]],
      deps: deps()]
   end
 
@@ -27,7 +28,9 @@ defmodule Topo.Mixfile do
       {:excoveralls, "~> 0.4", only: :test},
       {:envelope, "~> 0.2", only: :dev},
       {:earmark, "~> 0.1", only: :dev},
-      {:ex_doc, "~> 0.11", only: :dev}
+      {:ex_doc, "~> 0.11", only: :dev},
+      {:credo, "~> 0.5", only: [:dev, :test]},
+      {:dialyxir, "~> 0.4", only: [:dev], runtime: false}
     ]
   end
 

@@ -1,6 +1,9 @@
 defmodule Topo.PointRing do
   @moduledoc false
-  
+
+  @type point :: {number, number}
+
+  @spec relate(list, point) :: atom
   def relate(ring, {px, py}) do
     ring = for {x, y} <- ring, do: {x - px, y - py}
 
@@ -14,6 +17,7 @@ defmodule Topo.PointRing do
     end
   end
 
+  @spec relate_multi(list, point) :: atom
   def relate_multi([], _), do: :disjoint
   def relate_multi([a | rest], point) do
     case relate(a, point) do
@@ -22,9 +26,10 @@ defmodule Topo.PointRing do
     end
   end
 
+  @spec any_point?(list, list, atom) :: boolean
   def any_point?(ring, points, rel) do
     Enum.any? points, fn p ->
-      relate(ring, p) === rel
+      relate(ring, p) == rel
     end
   end
 
@@ -34,7 +39,7 @@ defmodule Topo.PointRing do
     {left_crosses, right_crosses} = count_crossing([{bx, by} | rest])
 
     cond do
-      left_crosses === :vertex -> {:vertex, :vertex}
+      left_crosses == :vertex -> {:vertex, :vertex}
       ((ay > 0) != (by > 0)) && (ax * by - bx * ay) / (by - ay) > 0 -> {left_crosses, right_crosses + 1}
       ((ay < 0) != (by < 0)) && (ax * by - bx * ay) / (by - ay) < 0 -> {left_crosses + 1, right_crosses}
       true -> {left_crosses, right_crosses}

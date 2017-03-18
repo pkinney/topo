@@ -1,29 +1,30 @@
 defmodule Topo.LineLine do
   @moduledoc false
-  
+
   alias Topo.Util
 
+  @spec relate(list, list) :: atom
   def relate(a, b) do
     do_linestring_intersects_linestring(a, b)
   end
 
+  @spec contains?(list, list) :: boolean
   def contains?([], _), do: false
   def contains?([_], _), do: false
   def contains?([a1, a2 | rest], [b1, b2]) do
-    (Util.collinear(a1, a2, b1)
-      && Util.between(a1, a2, b1)
-      && Util.collinear(a1, a2, b2)
-      && Util.between(a1, a2, b2)) || contains?([a2 | rest], [b1, b2])
+    (Util.collinear?(a1, a2, b1)
+      && Util.between?(a1, a2, b1)
+      && Util.collinear?(a1, a2, b2)
+      && Util.between?(a1, a2, b2)) || contains?([a2 | rest], [b1, b2])
   end
-
   def contains?(a, b) do
     do_contains?(a, b) || do_contains?(Enum.reverse(a), b)
   end
 
   defp do_contains?(a, b) do
     cond do
-      List.first(a) === List.last(a) && List.first(b) === List.last(b) -> ring_contains_ring?(Enum.drop(a, 1), Enum.drop(b, 1))
-      List.first(a) === List.last(a) -> ring_contains_line?(Enum.drop(a, 1), b)
+      List.first(a) == List.last(a) && List.first(b) === List.last(b) -> ring_contains_ring?(Enum.drop(a, 1), Enum.drop(b, 1))
+      List.first(a) == List.last(a) -> ring_contains_line?(Enum.drop(a, 1), b)
       !contiguous_subset?(a, b |> Enum.drop(1) |> Enum.drop(-1)) -> false
       first_and_last_on_line?(a, b) -> true
       true -> false
@@ -59,8 +60,8 @@ defmodule Topo.LineLine do
   defp line_up_head([_ | rest], b), do: line_up_head(rest, b)
 
   defp first_and_last_on_line?(a, b) do
-    i1 = Enum.find_index(a, &(&1==Enum.at(b, 1)))
-    in1 = length(a) - Enum.find_index(Enum.reverse(a), &(&1==Enum.at(b, -2))) - 1
+    i1 = Enum.find_index(a, &(&1 == Enum.at(b, 1)))
+    in1 = length(a) - Enum.find_index(Enum.reverse(a), &(&1 == Enum.at(b, -2))) - 1
 
     cond do
       i1 < in1 -> on_line_before?(a, List.first(b), i1) && on_line_after?(a, List.last(b), in1)
@@ -71,18 +72,18 @@ defmodule Topo.LineLine do
 
   defp on_line_before?(_, _, i) when i < 1, do: false
   defp on_line_before?(e, p, i) do
-    a = Enum.at(e, i-1)
+    a = Enum.at(e, i - 1)
     b = Enum.at(e, i)
 
-    Util.collinear(a, b, p) && Util.between(a, b, p)
+    Util.collinear?(a, b, p) && Util.between?(a, b, p)
   end
 
-  defp on_line_after?(e, _, i) when i+1 >= length(e), do: false
+  defp on_line_after?(e, _, i) when i + 1 >= length(e), do: false
   defp on_line_after?(e, p, i) do
-    a = Enum.at(e, i+1)
+    a = Enum.at(e, i + 1)
     b = Enum.at(e, i)
 
-    Util.collinear(a, b, p) && Util.between(a, b, p)
+    Util.collinear?(a, b, p) && Util.between?(a, b, p)
   end
 
   defp do_linestring_intersects_linestring([], _), do: :disjoint

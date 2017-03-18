@@ -1,12 +1,20 @@
 defmodule Topo.Intersects do
   @moduledoc false
-  
+
   alias Topo.PointLine
   alias Topo.PointRing
   alias Topo.LineLine
   alias Topo.LineRing
   alias Topo.RingRing
 
+  @type geo_struct :: %Geo.Point{}
+                    | %Geo.MultiPoint{}
+                    | %Geo.LineString{}
+                    | %Geo.MultiLineString{}
+                    | %Geo.Polygon{}
+                    | %Geo.MultiPolygon{}
+
+  @spec intersects?(geo_struct, geo_struct) :: boolean
   def intersects?(%Geo.Point{} = a, %Geo.Point{} = b), do: a == b
   def intersects?(%Geo.Point{} = a, %Geo.MultiPoint{} = b), do: intersects_any?(a, b, Geo.Point)
   def intersects?(%Geo.Point{coordinates: a}, %Geo.LineString{coordinates: b}), do: PointLine.relate(b, a) != :disjoint

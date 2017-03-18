@@ -180,6 +180,7 @@ defmodule Topo do
       ...> )
       false
   """
+  @spec equals?(geometry, geometry) :: boolean
   def equals?(a, b), do: do_equals?(Cleaner.clean(a), Cleaner.clean(b))
 
   defp do_equals?(a, b), do: Contains.contains?(a, b) && Contains.contains?(b, a)

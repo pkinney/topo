@@ -1,8 +1,18 @@
 defmodule Topo.Cleaner do
   @moduledoc false
-  
+
   import Topo.Util
 
+  @type geometry :: {number, number}
+                  | %{type: String.t, coordinates: list}
+                  | %Geo.Point{}
+                  | %Geo.MultiPoint{}
+                  | %Geo.LineString{}
+                  | %Geo.MultiLineString{}
+                  | %Geo.Polygon{}
+                  | %Geo.MultiPolygon{}
+
+  @spec clean(geometry) :: geometry
   def clean({x, y}), do: %Geo.Point{coordinates: {x, y}}
   def clean(%Geo.LineString{coordinates: a}) do
     %Geo.LineString{coordinates: do_clean_line(a)}
@@ -33,14 +43,15 @@ defmodule Topo.Cleaner do
 
   def clean(a), do: a
 
-  def do_clean_line(line) do
-    cond do
-      List.first(line) == List.last(line) -> do_clean_ring(line)
-      true -> line |> Enum.dedup |> assert_no_collinear
+  defp do_clean_line(line) do
+    if List.first(line) == List.last(line) do
+      do_clean_ring(line)
+    else
+      line |> Enum.dedup |> assert_no_collinear
     end
   end
 
-  def do_clean_ring(ring) do
+  defp do_clean_ring(ring) do
     ring
     |> Enum.dedup
     |> assert_closed
@@ -49,10 +60,10 @@ defmodule Topo.Cleaner do
     |> assert_no_collinear_over_closure
   end
 
-  def area([a, b, c, d | rest]) do
+  defp area([a, b, c, d | rest]) do
     cross(a, b, c) + area([a, c, d | rest])
   end
-  def area(_), do: 0
+  defp area(_), do: 0
 
   defp assert_closed([a|rest]) do
     case List.last(rest) do
@@ -62,18 +73,21 @@ defmodule Topo.Cleaner do
   end
 
   defp assert_direction(ring) do
-    cond do
-      area(ring) < 0 -> Enum.reverse(ring)
-      true -> ring
-    end
+    ring
+    |> area
+    |> reverse_if_negative_area(ring)
   end
+
+  defp reverse_if_negative_area(area, ring) when area >= 0, do: ring
+  defp reverse_if_negative_area(_, ring), do: Enum.reverse(ring)
 
   defp assert_no_collinear_over_closure(ring) when length(ring) < 4, do: ring
   defp assert_no_collinear_over_closure([b, c | rest]) do
     a = Enum.at(rest, -2)
-    cond do
-      collinear(a, c, b) && between(a, c, b) -> [c | Enum.drop(rest, -1)] ++ [c]
-      true -> [b, c | rest]
+    if collinear?(a, c, b) && between?(a, c, b) do
+      [c | Enum.drop(rest, -1)] ++ [c]
+    else
+      [b, c | rest]
     end
   end
 end
