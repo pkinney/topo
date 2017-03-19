@@ -23,7 +23,7 @@ defmodule Topo.RingRing do
       && !PointRing.any_point?(a, b, :disjoint)
   end
 
-  @spec none_contain_ring?(list, number) :: boolean
+  @spec none_contain_ring?(list, list) :: boolean
   def none_contain_ring?(rings, b) do
     Enum.all? rings, fn ring ->
       Util.any_edge_pair_not?(ring, b, :disjoint) || PointRing.any_point?(ring, b, :disjoint)
