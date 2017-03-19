@@ -12,4 +12,4 @@ before_script:
 script:
   - mix test
   - mix credo --all
-  - mix dialyzer --halt-exit-status --no_check_plt --plt $PLT_LOCATION --no_native _build/test/lib/topo/ebin
+  - dialyzer --no_check_plt --plt $PLT_LOCATION --no_native _build/test/lib/topo/ebin
