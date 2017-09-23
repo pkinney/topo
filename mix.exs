@@ -20,17 +20,17 @@ defmodule Topo.Mixfile do
 
   defp deps do
     [
-      {:geo, "~> 1.0"},
-      {:seg_seg, "~> 0.0.0"},
-      {:vector, "~> 0.2.0"},
-      {:poison, "~> 2.0", only: [:test, :dev]},
-      {:benchfella, "~> 0.3.0", only: :dev},
-      {:excoveralls, "~> 0.4", only: :test},
-      {:envelope, "~> 0.2", only: :dev},
-      {:earmark, "~> 0.1", only: :dev},
-      {:ex_doc, "~> 0.11", only: :dev},
-      {:credo, "~> 0.5", only: [:dev, :test]},
-      {:dialyxir, "~> 0.4", only: [:dev], runtime: false}
+      {:geo, "~> 2.0"},
+      {:seg_seg, "~> 0.1.1"},
+      {:vector, "~> 1.0"},
+      {:poison, "~> 3.0", only: [:test, :dev]},
+      {:benchfella, "~> 0.3.5", only: :dev},
+      {:excoveralls, "~> 0.7.3", only: :test},
+      {:envelope, "~> 1.0", only: :dev},
+      {:earmark, "~> 1.2", only: :dev},
+      {:ex_doc, "~> 0.16.4", only: :dev},
+      {:credo, "~> 0.8.6", only: [:dev, :test]},
+      {:dialyxir, "~> 0.5.1", only: [:dev], runtime: false}
     ]
   end
 

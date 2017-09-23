@@ -58,7 +58,7 @@ defmodule Mix.Tasks.Validation.Gen do
   end
 
   defp generate_test(test_case) do
-    title = test_case["title"] |> String.replace(~r{\[.*\]}, "") |> String.strip
+    title = test_case["title"] |> String.replace(~r{\[.*\]}, "") |> String.trim
 
     tags = if test_case["id"] in @skip do
       "@tag :validation\n  @tag :skip"

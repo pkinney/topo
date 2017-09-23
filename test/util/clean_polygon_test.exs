@@ -68,7 +68,7 @@ defmodule CleanPolygonTest do
   test "repeat the first point at the end of the hole in a MultiPolygon 2" do
     polygon = %Geo.MultiPolygon{coordinates: [[
       [{6, 12}, {6, 4}, {16, 4}, {16, 12}, {6, 12}]
-    ],[
+    ], [
       @valid_ring,
       Enum.drop(@valid_hole, -1)
     ]]}
@@ -81,7 +81,7 @@ defmodule CleanPolygonTest do
   test "clean a GeoJSON-like map" do
     polygon = %{type: "MultiPolygon", coordinates: [[
       [{6, 12}, {6, 4}, {16, 4}, {16, 12}, {6, 12}]
-    ],[
+    ], [
       @valid_ring,
       Enum.drop(@valid_hole, -1)
     ]]}
