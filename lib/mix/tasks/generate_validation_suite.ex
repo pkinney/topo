@@ -22,29 +22,45 @@ defmodule Mix.Tasks.Validation.Gen do
     "TestFunctionLL" => %{file_name: "line_line_b", module_name: "LineLineB"},
     "TestFunctionLA" => %{file_name: "line_polygon_b", module_name: "LinePolygonB"},
     "TestFunctionAA" => %{file_name: "polygon_polygon_b", module_name: "PolygonPolygonB"},
-    "TestFunctionPLPrec" => %{file_name: "point_line_precision", module_name: "PointLinePrecision"},
+    "TestFunctionPLPrec" => %{
+      file_name: "point_line_precision",
+      module_name: "PointLinePrecision"
+    },
     "TestFunctionLLPrec" => %{file_name: "line_line_precision", module_name: "LineLinePrecision"},
-    "TestFunctionLAPrec" => %{file_name: "line_polygon_precision", module_name: "LinePolygonPrecision"},
-    "TestFunctionAAPrec" => %{file_name: "polygon_polygon_precision", module_name: "PolygonPolygonPrecision"}
+    "TestFunctionLAPrec" => %{
+      file_name: "line_polygon_precision",
+      module_name: "LinePolygonPrecision"
+    },
+    "TestFunctionAAPrec" => %{
+      file_name: "polygon_polygon_precision",
+      module_name: "PolygonPolygonPrecision"
+    }
   }
 
   @spec run(any) :: atom
   def run(_) do
     cases = test_cases()
+
     Enum.each(Map.keys(@groups), fn group ->
       group_cases = Enum.filter(cases, &(&1["group"] == group))
-      write_test_file(group_cases, @groups[group].module_name <> "Test", "test/validation2/#{@groups[group].file_name}_test.exs")
+
+      write_test_file(
+        group_cases,
+        @groups[group].module_name <> "Test",
+        "test/validation2/#{@groups[group].file_name}_test.exs"
+      )
     end)
+
     :ok
   end
 
   defp test_cases() do
     ["lib", "mix", "tasks", "validation_cases.json"]
     |> Path.join()
-    |> File.read!
-    |> Poison.decode!
+    |> File.read!()
+    |> Poison.decode!()
     |> Map.get("cases")
-    |> Enum.filter(&(&1["b"]))
+    |> Enum.filter(& &1["b"])
   end
 
   defp write_test_file(cases, module_name, filename) do
@@ -58,13 +74,14 @@ defmodule Mix.Tasks.Validation.Gen do
   end
 
   defp generate_test(test_case) do
-    title = test_case["title"] |> String.replace(~r{\[.*\]}, "") |> String.strip
+    title = test_case["title"] |> String.replace(~r{\[.*\]}, "") |> String.strip()
 
-    tags = if test_case["id"] in @skip do
-      "@tag :validation\n  @tag :skip"
-    else
-      "@tag :validation"
-    end
+    tags =
+      if test_case["id"] in @skip do
+        "@tag :validation\n  @tag :skip"
+      else
+        "@tag :validation"
+      end
 
     build_test(test_case, title, tags)
   end
@@ -83,11 +100,11 @@ defmodule Mix.Tasks.Validation.Gen do
   end
 
   defp build_assertions(test_case) do
-    build_symetric_assertion(test_case, "intersects")
-    <> build_symetric_assertion(test_case, "disjoint")
-    <> build_asymetric_assertion(test_case, "contains")
-    <> build_asymetric_assertion(test_case, "within")
-    <> build_symetric_assertion(test_case, "equals")
+    build_symetric_assertion(test_case, "intersects") <>
+      build_symetric_assertion(test_case, "disjoint") <>
+      build_asymetric_assertion(test_case, "contains") <>
+      build_asymetric_assertion(test_case, "within") <>
+      build_symetric_assertion(test_case, "equals")
   end
 
   defp build_asymetric_assertion(test_case, relationship) do

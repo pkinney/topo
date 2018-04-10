@@ -16,9 +16,14 @@ defmodule Topo.Util do
   end
 
   @spec between?(point, point, point) :: boolean
-  def between?({ax, ay}, {bx, by}, {px, py}) when ax == bx and ay == by and (px != ax and py != ay), do: false
-  def between?({ax, ay}, {bx, by}, {_, py}) when ax == bx and ay != by, do: ((ay <= py) && (py <= by)) || ((ay >= py) && (py >= by))
-  def between?({ax, _}, {bx, _}, {px, _}), do: ((ax <= px) && (px <= bx)) || ((ax >= px) && (px >= bx))
+  def between?({ax, ay}, {bx, by}, {px, py})
+      when ax == bx and ay == by and (px != ax and py != ay),
+      do: false
+
+  def between?({ax, ay}, {bx, by}, {_, py}) when ax == bx and ay != by,
+    do: (ay <= py && py <= by) || (ay >= py && py >= by)
+
+  def between?({ax, _}, {bx, _}, {px, _}), do: (ax <= px && px <= bx) || (ax >= px && px >= bx)
 
   @spec assert_no_collinear(list) :: list
   def assert_no_collinear([a, b, c | rest]) do
@@ -28,6 +33,7 @@ defmodule Topo.Util do
       [a] ++ assert_no_collinear([b, c | rest])
     end
   end
+
   def assert_no_collinear(ring), do: ring
 
   @spec midpoint(point, point) :: point
@@ -37,26 +43,28 @@ defmodule Topo.Util do
 
   @spec any_edge_pair_not?(list, list, atom) :: boolean
   def any_edge_pair_not?(a, b, rel) do
-    do_any_edge_pair? a, b, fn a1, a2, b1, b2 ->
+    do_any_edge_pair?(a, b, fn a1, a2, b1, b2 ->
       elem(SegSeg.intersection(a1, a2, b1, b2), 1) != rel
-    end
+    end)
   end
 
   @spec any_edge_pair?(list, list, atom) :: boolean
   def any_edge_pair?(a, b, rel) do
-    do_any_edge_pair? a, b, fn a1, a2, b1, b2 ->
+    do_any_edge_pair?(a, b, fn a1, a2, b1, b2 ->
       elem(SegSeg.intersection(a1, a2, b1, b2), 1) == rel
-    end
+    end)
   end
 
   @spec do_any_edge_pair?(list, list, function) :: boolean
   defp do_any_edge_pair?(_, [_], _), do: false
+
   defp do_any_edge_pair?(a, [b1, b2 | rest], fun) do
     any_edge?(a, [b1, b2], fun) || do_any_edge_pair?(a, [b2 | rest], fun)
   end
 
   @spec any_edge?(list, list, function) :: boolean
   defp any_edge?([_], _, _), do: false
+
   defp any_edge?([a1, a2 | rest], [b1, b2], fun) do
     fun.(a1, a2, b1, b2) || any_edge?([a2 | rest], [b1, b2], fun)
   end
