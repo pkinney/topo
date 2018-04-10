@@ -5,7 +5,7 @@ defmodule Topo.Mixfile do
     [
       app: :topo,
       version: "0.1.2",
-      elixir: "~> 1.2",
+      elixir: "~> 1.3",
       description: description(),
       package: package(),
       build_embedded: Mix.env() == :prod,
