@@ -4,7 +4,7 @@ defmodule Topo.Mixfile do
   def project do
     [
       app: :topo,
-      version: "0.1.2",
+      version: "0.2.0",
       elixir: "~> 1.2",
       description: description(),
       package: package(),
@@ -22,17 +22,16 @@ defmodule Topo.Mixfile do
 
   defp deps do
     [
-      {:geo, "~> 1.0"},
-      {:seg_seg, "~> 0.0.0"},
-      {:vector, "~> 0.2.0"},
-      {:poison, "~> 2.0", only: [:test, :dev]},
+      {:geo, "~> 2.1"},
+      {:seg_seg, "~> 0.1"},
+      {:vector, "~> 1.0"},
+      {:poison, "~> 3.0", only: [:test, :dev]},
       {:benchfella, "~> 0.3.0", only: :dev},
-      {:excoveralls, "~> 0.4", only: :test},
-      {:envelope, "~> 0.2", only: :dev},
-      {:earmark, "~> 0.1", only: :dev},
-      {:ex_doc, "~> 0.11", only: :dev},
-      {:credo, "~> 0.5", only: [:dev, :test]},
-      {:dialyxir, "~> 0.4", only: [:dev], runtime: false}
+      {:excoveralls, "~> 0.8", only: :test},
+      {:envelope, "~> 1.0", only: :dev},
+      {:earmark, "~> 1.2", only: :dev},
+      {:ex_doc, "~> 0.18", only: :dev},
+      {:dialyxir, "~> 0.5", only: [:dev], runtime: false}
     ]
   end
 
