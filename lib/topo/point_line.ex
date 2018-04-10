@@ -3,6 +3,7 @@ defmodule Topo.PointLine do
 
   @spec relate(list, {number, number}) :: atom
   def relate([_], _), do: :disjoint
+
   def relate([a, b | rest], p) do
     cond do
       a == p -> :vertex
