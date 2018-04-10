@@ -45,14 +45,15 @@ defmodule Topo do
   LineStrings or Polygons.
   """
 
-  @type geometry :: {number, number}
-                  | %{type: String.t, coordinates: list}
-                  | %Geo.Point{}
-                  | %Geo.MultiPoint{}
-                  | %Geo.LineString{}
-                  | %Geo.MultiLineString{}
-                  | %Geo.Polygon{}
-                  | %Geo.MultiPolygon{}
+  @type geometry ::
+          {number, number}
+          | %{type: String.t(), coordinates: list}
+          | %Geo.Point{}
+          | %Geo.MultiPoint{}
+          | %Geo.LineString{}
+          | %Geo.MultiLineString{}
+          | %Geo.Polygon{}
+          | %Geo.MultiPolygon{}
 
   @doc ~S"""
   Returns `true` if geometries **A** and **B** share at least one point in

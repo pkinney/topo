@@ -16,10 +16,12 @@ defmodule CleanLineStringTest do
   end
 
   test "remove a duplicate point from a MultiLineString" do
-    b = %Geo.MultiLineString{coordinates: [
-      List.insert_at(@valid_line, 1, Enum.at(@valid_line, 1)),
-      List.insert_at(@valid_line, 0, Enum.at(@valid_line, 0))
-    ]}
+    b = %Geo.MultiLineString{
+      coordinates: [
+        List.insert_at(@valid_line, 1, Enum.at(@valid_line, 1)),
+        List.insert_at(@valid_line, 0, Enum.at(@valid_line, 0))
+      ]
+    }
 
     assert Topo.Cleaner.clean(b).coordinates === [@valid_line, @valid_line]
   end

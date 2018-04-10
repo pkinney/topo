@@ -2,16 +2,18 @@ defmodule Topo.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :topo,
-     version: "0.1.2",
-     elixir: "~> 1.2",
-     description: description(),
-     package: package(),
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     test_coverage: [tool: ExCoveralls],
-     dialyzer: [plt_add_apps: [:poison, :mix]],
-     deps: deps()]
+    [
+      app: :topo,
+      version: "0.1.2",
+      elixir: "~> 1.2",
+      description: description(),
+      package: package(),
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
+      test_coverage: [tool: ExCoveralls],
+      dialyzer: [plt_add_apps: [:poison, :mix]],
+      deps: deps()
+    ]
   end
 
   def application do
