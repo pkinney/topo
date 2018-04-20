@@ -91,8 +91,8 @@ defmodule Mix.Tasks.Validation.Gen do
 
       #{tag_str}
       test "#{test_case["id"]} - #{title}" do
-        a = "#{test_case["a"]["wkt"]}" |> Geo.WKT.decode
-        b = "#{test_case["b"]["wkt"]}" |> Geo.WKT.decode
+        a = "#{test_case["a"]["wkt"]}" |> Geo.WKT.decode!
+        b = "#{test_case["b"]["wkt"]}" |> Geo.WKT.decode!
 
     #{build_assertions(test_case)}
       end
