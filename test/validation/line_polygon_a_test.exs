@@ -1,4 +1,4 @@
-defmodule Intersect.Validation.LinePolygonATest do
+defmodule Topo.Validation.LinePolygonATest do
   use ExUnit.Case
 
   @tag :validation

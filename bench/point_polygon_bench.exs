@@ -16,6 +16,33 @@ defmodule PointPolygonBench do
     end
   end
 
+  bench "Point inside Polygon" do
+    intersects? {6, 7}, @polygon
+  end
+
+  bench "Point on vertex of Polygon" do
+    intersects? {5, 7}, @polygon
+  end
+
+  bench "Point on edge of Polygon" do
+    intersects? {5.5, 6.5}, @polygon
+  end
+
+  bench "Point outside of Polygon" do
+    intersects? {5.5, 7}, @polygon
+  end
+
+  bench "Point way outside of Polygon" do
+    intersects? {25, 37}, @polygon
+  end
+
+  bench "Point way outside of Polygon with envelope check" do
+    case Envelope.contains?(Envelope.from_geo(@polygon), {25, 37}) do
+      true -> Topo.intersects?(@polygon, {25, 37})
+      false -> false
+    end
+  end
+
   bench "MultiPoint / Polygon intersects" do
     intersects? @multipoint, @polygon
   end

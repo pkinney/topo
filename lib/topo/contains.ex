@@ -19,17 +19,11 @@ defmodule Topo.Contains do
   @spec contains?(geo_struct, geo_struct) :: boolean
   def contains?(%Geo.Point{} = a, %Geo.Point{} = b), do: a == b
   def contains?(%Geo.Point{} = a, %Geo.MultiPoint{} = b), do: contains_all?(a, b, Geo.Point)
-  def contains?(%Geo.Point{}, %Geo.LineString{}), do: false
-  def contains?(%Geo.Point{}, %Geo.MultiLineString{}), do: false
-  def contains?(%Geo.Point{}, %Geo.Polygon{}), do: false
-  def contains?(%Geo.Point{}, %Geo.MultiPolygon{}), do: false
+  def contains?(%Geo.Point{}, _), do: false
 
   def contains?(%Geo.MultiPoint{} = a, %Geo.Point{} = b), do: any_contain?(a, b, Geo.Point)
   def contains?(%Geo.MultiPoint{} = a, %Geo.MultiPoint{} = b), do: contains_all?(a, b, Geo.Point)
-  def contains?(%Geo.MultiPoint{}, %Geo.LineString{}), do: false
-  def contains?(%Geo.MultiPoint{}, %Geo.MultiLineString{}), do: false
-  def contains?(%Geo.MultiPoint{}, %Geo.Polygon{}), do: false
-  def contains?(%Geo.MultiPoint{}, %Geo.MultiPolygon{}), do: false
+  def contains?(%Geo.MultiPoint{}, _), do: false
 
   def contains?(%Geo.LineString{} = a, %Geo.Point{} = b) do
     cond do
