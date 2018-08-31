@@ -34,12 +34,22 @@ defmodule Topo.PointRing do
     end)
   end
 
-  defp count_crossing([_]), do: {0, 0}
-  defp count_crossing([{0, 0} | _]), do: {:vertex, :vertex}
+  defp count_crossing(ring) do
+    count_crossing(ring, {0, 0})
+  end
 
-  defp count_crossing([{ax, ay}, {bx, by} | rest]) do
-    {left_crosses, right_crosses} = count_crossing([{bx, by} | rest])
+  defp count_crossing([{0, 0} | _], _), do: {:vertex, :vertex}
 
+  defp count_crossing([a, b | rest], crosses) do
+    crosses = calc_crosses(a, b, crosses)
+    count_crossing([b | rest], crosses)
+  end
+
+  defp count_crossing(_, crosses) do
+    crosses
+  end
+
+  defp calc_crosses({ax, ay}, {bx, by}, {left_crosses, right_crosses}) do
     cond do
       left_crosses == :vertex -> {:vertex, :vertex}
       ay > 0 != by > 0 && (ax * by - bx * ay) / (by - ay) > 0 -> {left_crosses, right_crosses + 1}
