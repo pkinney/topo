@@ -4,7 +4,7 @@ defmodule Topo.Mixfile do
   def project do
     [
       app: :topo,
-      version: "0.2.0",
+      version: "0.3.0",
       elixir: "~> 1.6",
       description: description(),
       package: package(),
@@ -30,7 +30,7 @@ defmodule Topo.Mixfile do
       {:excoveralls, "~> 0.8", only: :test},
       {:envelope, "~> 1.0", only: :dev},
       {:earmark, "~> 1.2", only: :dev},
-      {:ex_doc, "~> 0.18", only: :dev},
+      {:ex_doc, "~> 0.19", only: :dev},
       {:dialyxir, "~> 0.5", only: [:dev], runtime: false}
     ]
   end
