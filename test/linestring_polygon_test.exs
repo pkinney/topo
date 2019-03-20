@@ -56,8 +56,8 @@ defmodule LineStringPolygonTest do
   end
 
   test "line within a polygon only touching the boundary" do
-    a = "POLYGON ((150 150, 410 150, 280 20, 20 20, 150 150)" |> Geo.WKT.decode()
-    b = "LINESTRING (70 70, 80 20)" |> Geo.WKT.decode()
+    a = "POLYGON ((150 150, 410 150, 280 20, 20 20, 150 150)" |> Geo.WKT.decode!()
+    b = "LINESTRING (70 70, 80 20)" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b)
     assert Topo.intersects?(b, a)
@@ -65,8 +65,8 @@ defmodule LineStringPolygonTest do
   end
 
   test "line outside a polygon only touching the boundary" do
-    a = "POLYGON ((150 150, 0 0, 280 20, 20 20, 150 150)" |> Geo.WKT.decode()
-    b = "LINESTRING (70 70, 80 20)" |> Geo.WKT.decode()
+    a = "POLYGON ((150 150, 0 0, 280 20, 20 20, 150 150)" |> Geo.WKT.decode!()
+    b = "LINESTRING (70 70, 80 20)" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b)
     assert Topo.intersects?(b, a)
@@ -76,9 +76,9 @@ defmodule LineStringPolygonTest do
   test "line within a polygon with hole only touching the boundary but crosses a hole" do
     a =
       "POLYGON ((150 150, 410 150, 280 20, 20 20, 150 150),(170 120, 250 120, 180 50, 100 50, 170 120))"
-      |> Geo.WKT.decode()
+      |> Geo.WKT.decode!()
 
-    b = "LINESTRING (100 100, 140 20)" |> Geo.WKT.decode()
+    b = "LINESTRING (100 100, 140 20)" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b)
     assert Topo.intersects?(b, a)
@@ -87,9 +87,9 @@ defmodule LineStringPolygonTest do
 
   test "line within hole that touches two edges" do
     a =
-      "POLYGON((0 0, 10 0, 10 10, 0 10, 0 0),(3 3, 6 3, 8 5, 6 7, 3 7, 3 3))" |> Geo.WKT.decode()
+      "POLYGON((0 0, 10 0, 10 10, 0 10, 0 0),(3 3, 6 3, 8 5, 6 7, 3 7, 3 3))" |> Geo.WKT.decode!()
 
-    b = "LINESTRING(7 6, 7 4)" |> Geo.WKT.decode()
+    b = "LINESTRING(7 6, 7 4)" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b)
     assert Topo.intersects?(b, a)
@@ -98,9 +98,9 @@ defmodule LineStringPolygonTest do
 
   test "line outside of hole that touches two edges" do
     a =
-      "POLYGON((0 0, 10 0, 10 10, 0 10, 0 0),(3 3, 8 3, 6 5, 8 7, 3 7, 3 3))" |> Geo.WKT.decode()
+      "POLYGON((0 0, 10 0, 10 10, 0 10, 0 0),(3 3, 8 3, 6 5, 8 7, 3 7, 3 3))" |> Geo.WKT.decode!()
 
-    b = "LINESTRING(7 6, 7 4)" |> Geo.WKT.decode()
+    b = "LINESTRING(7 6, 7 4)" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b)
     assert Topo.intersects?(b, a)

@@ -1,11 +1,22 @@
 language: elixir
 elixir:
-  - 1.4
-  - 1.5
   - 1.6
+  - 1.7
+  - 1.8
 otp_release:
   - 19.3
-  - 20.1
+  - 20.3
+  - 21.0
+matrix:
+  exclude:
+    - elixir: 1.7
+      otp_release: 19.3
+    - elixir: 1.7
+      otp_release: 20.3
+    - elixir: 1.8
+      otp_release: 19.3
+    - elixir: 1.8
+      otp_release: 20.3
 script: 
   - elixir -e "Version.match?(System.version, ~s(~> 1.6)) || System.halt(0)" -S mix format --check-formatted
   - mix test
