@@ -5,7 +5,7 @@ defmodule Topo.Mixfile do
     [
       app: :topo,
       version: "0.2.0",
-      elixir: "~> 1.3",
+      elixir: "~> 1.6",
       description: description(),
       package: package(),
       build_embedded: Mix.env() == :prod,
@@ -22,7 +22,7 @@ defmodule Topo.Mixfile do
 
   defp deps do
     [
-      {:geo, "~> 2.1"},
+      {:geo, "~> 3.1"},
       {:seg_seg, "~> 0.1"},
       {:vector, "~> 1.0"},
       {:poison, "~> 3.0", only: [:test, :dev]},
