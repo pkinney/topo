@@ -17,6 +17,24 @@ defmodule PolygonPolygonTest do
     assert Topo.contains?(@polygon, @polygon)
   end
 
+  test "Polygon should contain itself both with floating-point and integer coordinates" do
+    triangle_int = %Geo.Polygon{coordinates: [[{2, 2}, {20, 2}, {11, 11}, {2, 2}]]}
+
+    triangle_float = %Geo.Polygon{
+      coordinates: [[{2.0, 2.0}, {20.0, 2.0}, {11.0, 11.0}, {2.0, 2.0}]]
+    }
+
+    assert Topo.contains?(triangle_int, triangle_int)
+    assert Topo.contains?(triangle_float, triangle_int)
+    assert Topo.contains?(triangle_int, triangle_float)
+    assert Topo.contains?(triangle_float, triangle_float)
+
+    assert Topo.equals?(triangle_int, triangle_int)
+    assert Topo.equals?(triangle_float, triangle_int)
+    assert Topo.equals?(triangle_int, triangle_float)
+    assert Topo.equals?(triangle_float, triangle_float)
+  end
+
   test "Polygon with holes should intersect itself" do
     assert Topo.intersects?(@polygon_with_hole, @polygon_with_hole)
   end

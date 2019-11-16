@@ -17,9 +17,39 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-001 - A/A-1-1: same polygons (float)" do
+    a = "POLYGON((20.0 20.0,20.0 100.0,120.0 100.0,140.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((20.0 20.0,20.0 100.0,120.0 100.0,140.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == true
+    assert Topo.equals?(a, b) == true
+    assert Topo.equals?(b, a) == true
+  end
+
+  @tag :validation
   test "07-002 - A/A-1-2: same polygons with reverse sequence of points" do
     a = "POLYGON ((20 20, 20 100, 120 100, 140 20, 20 20))" |> Geo.WKT.decode!()
     b = "POLYGON ((20 20, 140 20, 120 100, 20 100, 20 20))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == true
+    assert Topo.equals?(a, b) == true
+    assert Topo.equals?(b, a) == true
+  end
+
+  @tag :validation
+  test "07-002 - A/A-1-2: same polygons with reverse sequence of points (float)" do
+    a = "POLYGON((20.0 20.0,20.0 100.0,120.0 100.0,140.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((20.0 20.0,140.0 20.0,120.0 100.0,20.0 100.0,20.0 20.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -47,9 +77,42 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-003 - A/A-1-3: same polygons with different sequence of points (float)" do
+    a = "POLYGON((20.0 20.0,20.0 100.0,120.0 100.0,140.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((120.0 100.0,140.0 20.0,20.0 20.0,20.0 100.0,120.0 100.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == true
+    assert Topo.equals?(a, b) == true
+    assert Topo.equals?(b, a) == true
+  end
+
+  @tag :validation
   test "07-004 - A/A-1-4: same polygons with different number of points" do
     a = "POLYGON ((20 20, 20 100, 120 100, 140 20, 20 20))" |> Geo.WKT.decode!()
     b = "POLYGON ((20 100, 60 100, 120 100, 140 20, 80 20, 20 20, 20 100))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == true
+    assert Topo.equals?(a, b) == true
+    assert Topo.equals?(b, a) == true
+  end
+
+  @tag :validation
+  test "07-004 - A/A-1-4: same polygons with different number of points (float)" do
+    a = "POLYGON((20.0 20.0,20.0 100.0,120.0 100.0,140.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((20.0 100.0,60.0 100.0,120.0 100.0,140.0 20.0,80.0 20.0,20.0 20.0,20.0 100.0))"
+      |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -77,9 +140,45 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-005 - A/A-2: different polygons (float)" do
+    a = "POLYGON((0.0 0.0,80.0 0.0,80.0 80.0,0.0 80.0,0.0 0.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((100.0 200.0,100.0 140.0,180.0 140.0,180.0 200.0,100.0 200.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == false
+    assert Topo.intersects?(b, a) == false
+    assert Topo.disjoint?(a, b) == true
+    assert Topo.disjoint?(b, a) == true
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-006 - A/A-3-1-1: the closing point of a polygon touching the closing point of another polygon" do
     a = "POLYGON ((140 120, 160 20, 20 20, 20 120, 140 120))" |> Geo.WKT.decode!()
     b = "POLYGON ((140 120, 140 200, 240 200, 240 120, 140 120))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-006 - A/A-3-1-1: the closing point of a polygon touching the closing point of another polygon (float)" do
+    a = "POLYGON((140.0 120.0,160.0 20.0,20.0 20.0,20.0 120.0,140.0 120.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((140.0 120.0,140.0 200.0,240.0 200.0,240.0 120.0,140.0 120.0))"
+      |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -107,9 +206,41 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-007 - A/A-3-1-2: the closing point of a polygon touching the boundary (at a non-vertex) of another polygon (float)" do
+    a = "POLYGON((140.0 120.0,160.0 20.0,20.0 20.0,20.0 120.0,140.0 120.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((80.0 180.0,140.0 260.0,260.0 200.0,200.0 60.0,80.0 180.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-008 - A/A-3-1-3: the closing point of a polygon touching the boundary (at a vertex) of another polygon" do
     a = "POLYGON ((140 120, 160 20, 20 20, 20 120, 140 120))" |> Geo.WKT.decode!()
     b = "POLYGON ((240 80, 140 120, 180 240, 280 200, 240 80))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-008 - A/A-3-1-3: the closing point of a polygon touching the boundary (at a vertex) of another polygon (float)" do
+    a = "POLYGON((140.0 120.0,160.0 20.0,20.0 20.0,20.0 120.0,140.0 120.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((240.0 80.0,140.0 120.0,180.0 240.0,280.0 200.0,240.0 80.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -137,9 +268,45 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-009 - A/A-3-1-4: the boundary (at a non-vertex) of a polygon touching the closing point of another polygon (float)" do
+    a =
+      "POLYGON((140.0 160.0,20.0 20.0,270.0 20.0,150.0 160.0,230.0 40.0,60.0 40.0,140.0 160.0))"
+      |> Geo.WKT.decode!()
+
+    b = "POLYGON((140.0 40.0,180.0 80.0,120.0 100.0,140.0 40.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-010 - A/A-3-1-5: the boundary (at a non-vertex) of a polygon touching the boundary (at a vertex) of another polygon" do
     a = "POLYGON ((140 160, 20 20, 270 20, 150 160, 230 40, 60 40, 140 160))" |> Geo.WKT.decode!()
     b = "POLYGON ((120 100, 180 80, 130 40, 120 100))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-010 - A/A-3-1-5: the boundary (at a non-vertex) of a polygon touching the boundary (at a vertex) of another polygon (float)" do
+    a =
+      "POLYGON((140.0 160.0,20.0 20.0,270.0 20.0,150.0 160.0,230.0 40.0,60.0 40.0,140.0 160.0))"
+      |> Geo.WKT.decode!()
+
+    b = "POLYGON((120.0 100.0,180.0 80.0,130.0 40.0,120.0 100.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -167,9 +334,41 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-011 - A/A-3-1-6: the boundary (at a vertex) of a polygon touching the boundary (at a non-vertex) of another polygon (float)" do
+    a = "POLYGON((20.0 20.0,180.0 20.0,140.0 140.0,20.0 140.0,20.0 20.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((180.0 100.0,80.0 200.0,180.0 280.0,260.0 200.0,180.0 100.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-012 - A/A-3-1-7: the boundary (at a vertex) of a polygon touching the boundary (at a vertex) of another polygon" do
     a = "POLYGON ((140 120, 160 20, 20 20, 20 120, 140 120))" |> Geo.WKT.decode!()
     b = "POLYGON ((140 140, 20 120, 0 220, 120 240, 140 140))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-012 - A/A-3-1-7: the boundary (at a vertex) of a polygon touching the boundary (at a vertex) of another polygon (float)" do
+    a = "POLYGON((140.0 120.0,160.0 20.0,20.0 20.0,20.0 120.0,140.0 120.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((140.0 140.0,20.0 120.0,0.0 220.0,120.0 240.0,140.0 140.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -197,11 +396,47 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-013 - A/A-3-1-8: the closing point of a polygon touching the boundary of another polygon where the closing point touching the boundary at a vertex (float)" do
+    a = "POLYGON((160.0 200.0,210.0 70.0,120.0 70.0,160.0 200.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((160.0 200.0,260.0 40.0,70.0 40.0,160.0 200.0,20.0 20.0,310.0 20.0,160.0 200.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-014 - A/A-3-1-9: the closing point of a polygon touching the boundary of another polygon where the closing point intersecting the boundary at a non-vertex" do
     a = "POLYGON ((110 140, 200 70, 200 160, 110 140))" |> Geo.WKT.decode!()
 
     b =
       "POLYGON ((110 140, 110 50, 60 50, 60 90, 160 190, 20 110, 20 20, 200 20, 110 140))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-014 - A/A-3-1-9: the closing point of a polygon touching the boundary of another polygon where the closing point intersecting the boundary at a non-vertex (float)" do
+    a = "POLYGON((110.0 140.0,200.0 70.0,200.0 160.0,110.0 140.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((110.0 140.0,110.0 50.0,60.0 50.0,60.0 90.0,160.0 190.0,20.0 110.0,20.0 20.0,200.0 20.0,110.0 140.0))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
@@ -235,12 +470,50 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-015 - A/A-3-2-1: two polygons touching at multiple points (float)" do
+    a =
+      "POLYGON((20.0 120.0,20.0 20.0,260.0 20.0,260.0 120.0,200.0 40.0,140.0 120.0,80.0 40.0,20.0 120.0))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((20.0 120.0,20.0 240.0,260.0 240.0,260.0 120.0,200.0 200.0,140.0 120.0,80.0 200.0,20.0 120.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-016 - A/A-3-2-2: two polygons touching at multiple points" do
     a =
       "POLYGON ((20 120, 20 20, 260 20, 260 120, 180 40, 140 120, 100 40, 20 120))"
       |> Geo.WKT.decode!()
 
     b = "POLYGON ((20 120, 300 120, 140 240, 20 120))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-016 - A/A-3-2-2: two polygons touching at multiple points (float)" do
+    a =
+      "POLYGON((20.0 120.0,20.0 20.0,260.0 20.0,260.0 120.0,180.0 40.0,140.0 120.0,100.0 40.0,20.0 120.0))"
+      |> Geo.WKT.decode!()
+
+    b = "POLYGON((20.0 120.0,300.0 120.0,140.0 240.0,20.0 120.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -273,12 +546,52 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-017 - A/A-3-2-3: two polygons touching at multiple points (float)" do
+    a =
+      "POLYGON((20.0 20.0,20.0 300.0,280.0 300.0,280.0 260.0,220.0 260.0,60.0 100.0,60.0 60.0,280.0 60.0,280.0 20.0,20.0 20.0))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((100.0 140.0,160.0 80.0,280.0 180.0,200.0 240.0,220.0 160.0,160.0 200.0,180.0 120.0,100.0 140.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-018 - A/A-3-2-4: two polygons touching at multiple points" do
     a =
       "POLYGON ((20 20, 20 300, 280 300, 280 260, 220 260, 60 100, 60 60, 280 60, 280 20, 20 20))"
       |> Geo.WKT.decode!()
 
     b = "POLYGON ((260 200, 180 80, 120 160, 200 160, 180 220, 260 200))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-018 - A/A-3-2-4: two polygons touching at multiple points (float)" do
+    a =
+      "POLYGON((20.0 20.0,20.0 300.0,280.0 300.0,280.0 260.0,220.0 260.0,60.0 100.0,60.0 60.0,280.0 60.0,280.0 20.0,20.0 20.0))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((260.0 200.0,180.0 80.0,120.0 160.0,200.0 160.0,180.0 220.0,260.0 200.0))"
+      |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -309,12 +622,48 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-019 - A/A-3-2-5: two polygons touching at multiple points (float)" do
+    a =
+      "POLYGON((20.0 20.0,280.0 20.0,280.0 140.0,220.0 60.0,140.0 140.0,80.0 60.0,20.0 140.0,20.0 20.0))"
+      |> Geo.WKT.decode!()
+
+    b = "POLYGON((0.0 140.0,300.0 140.0,140.0 240.0,0.0 140.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-020 - A/A-3-2-6: two polygons touching at multiple points" do
     a =
       "POLYGON ((20 20, 280 20, 280 140, 220 60, 140 140, 80 60, 20 140, 20 20))"
       |> Geo.WKT.decode!()
 
     b = "POLYGON ((20 240, 20 140, 320 140, 180 240, 20 240))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-020 - A/A-3-2-6: two polygons touching at multiple points (float)" do
+    a =
+      "POLYGON((20.0 20.0,280.0 20.0,280.0 140.0,220.0 60.0,140.0 140.0,80.0 60.0,20.0 140.0,20.0 20.0))"
+      |> Geo.WKT.decode!()
+
+    b = "POLYGON((20.0 240.0,20.0 140.0,320.0 140.0,180.0 240.0,20.0 240.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -347,9 +696,46 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-021 - A/A-3-2-7: two polygons touching at multiple points (float)" do
+    a =
+      "POLYGON((20.0 20.0,280.0 20.0,280.0 140.0,220.0 60.0,140.0 140.0,80.0 60.0,20.0 140.0,20.0 20.0))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((20.0 240.0,20.0 140.0,80.0 180.0,140.0 140.0,220.0 180.0,280.0 140.0,280.0 240.0,20.0 240.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-022 - A/A-3-3-1: two polygons touching along a boundary" do
     a = "POLYGON ((120 120, 180 60, 20 20, 20 120, 120 120))" |> Geo.WKT.decode!()
     b = "POLYGON ((120 120, 220 20, 280 20, 240 160, 120 120))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-022 - A/A-3-3-1: two polygons touching along a boundary (float)" do
+    a = "POLYGON((120.0 120.0,180.0 60.0,20.0 20.0,20.0 120.0,120.0 120.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((120.0 120.0,220.0 20.0,280.0 20.0,240.0 160.0,120.0 120.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -377,9 +763,41 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-023 - A/A-3-3-2: two polygons touching along a boundary (float)" do
+    a = "POLYGON((140.0 120.0,160.0 20.0,20.0 20.0,20.0 120.0,140.0 120.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((140.0 120.0,160.0 20.0,260.0 120.0,220.0 200.0,140.0 120.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-024 - A/A-3-3-3: two polygons touching along a boundary" do
     a = "POLYGON ((20 140, 120 40, 20 40, 20 140))" |> Geo.WKT.decode!()
     b = "POLYGON ((190 140, 190 20, 140 20, 20 140, 190 140))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-024 - A/A-3-3-3: two polygons touching along a boundary (float)" do
+    a = "POLYGON((20.0 140.0,120.0 40.0,20.0 40.0,20.0 140.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((190.0 140.0,190.0 20.0,140.0 20.0,20.0 140.0,190.0 140.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -407,9 +825,41 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-025 - A/A-3-3-4: two polygons touching along a boundary (float)" do
+    a = "POLYGON((120.0 120.0,180.0 60.0,20.0 20.0,20.0 120.0,120.0 120.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((300.0 20.0,220.0 20.0,120.0 120.0,260.0 160.0,300.0 20.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-026 - A/A-3-3-5: two polygons touching along a boundary" do
     a = "POLYGON ((140 120, 160 20, 20 20, 20 120, 140 120))" |> Geo.WKT.decode!()
     b = "POLYGON ((140 120, 240 160, 280 60, 160 20, 140 120))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-026 - A/A-3-3-5: two polygons touching along a boundary (float)" do
+    a = "POLYGON((140.0 120.0,160.0 20.0,20.0 20.0,20.0 120.0,140.0 120.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((140.0 120.0,240.0 160.0,280.0 60.0,160.0 20.0,140.0 120.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -437,9 +887,41 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-027 - A/A-3-3-6: two polygons touching along a boundary (float)" do
+    a = "POLYGON((120.0 120.0,180.0 60.0,20.0 20.0,20.0 120.0,120.0 120.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((280.0 60.0,180.0 60.0,120.0 120.0,260.0 180.0,280.0 60.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-028 - A/A-3-3-7: two polygons touching along a boundary" do
     a = "POLYGON ((140 120, 160 20, 20 20, 20 120, 140 120))" |> Geo.WKT.decode!()
     b = "POLYGON ((120 200, 120 120, 40 120, 40 200, 120 200))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-028 - A/A-3-3-7: two polygons touching along a boundary (float)" do
+    a = "POLYGON((140.0 120.0,160.0 20.0,20.0 20.0,20.0 120.0,140.0 120.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((120.0 200.0,120.0 120.0,40.0 120.0,40.0 200.0,120.0 200.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -467,9 +949,43 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-029 - A/A-3-3-8: two polygons touching along a boundary (float)" do
+    a = "POLYGON((140.0 120.0,160.0 20.0,20.0 20.0,20.0 120.0,140.0 120.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((160.0 220.0,140.0 120.0,60.0 120.0,40.0 220.0,160.0 220.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-030 - A/A-3-3-9: two polygons touching along a boundary" do
     a = "POLYGON ((140 120, 160 20, 20 20, 20 120, 140 120))" |> Geo.WKT.decode!()
     b = "POLYGON ((140 120, 20 120, 20 220, 140 220, 140 120))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-030 - A/A-3-3-9: two polygons touching along a boundary (float)" do
+    a = "POLYGON((140.0 120.0,160.0 20.0,20.0 20.0,20.0 120.0,140.0 120.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((140.0 120.0,20.0 120.0,20.0 220.0,140.0 220.0,140.0 120.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -497,9 +1013,39 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-031 - A/A-3-3-10: two polygons touching along a boundary (float)" do
+    a = "POLYGON((120.0 120.0,180.0 60.0,20.0 20.0,20.0 120.0,120.0 120.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((320.0 20.0,220.0 20.0,80.0 160.0,240.0 140.0,320.0 20.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-032 - A/A-5-1: a polygon containing another polygon" do
     a = "POLYGON ((20 20, 20 180, 220 180, 220 20, 20 20))" |> Geo.WKT.decode!()
     b = "POLYGON ((60 40, 60 140, 180 140, 180 40, 60 40))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-032 - A/A-5-1: a polygon containing another polygon (float)" do
+    a = "POLYGON((20.0 20.0,20.0 180.0,220.0 180.0,220.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((60.0 40.0,60.0 140.0,180.0 140.0,180.0 40.0,60.0 40.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -527,9 +1073,39 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-033 - A/A-5-2-1: a polygon containing another polygon (float)" do
+    a = "POLYGON((20.0 20.0,20.0 180.0,220.0 180.0,220.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((20.0 20.0,80.0 140.0,160.0 60.0,20.0 20.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-034 - A/A-5-2-2: a polygon containing another polygon" do
     a = "POLYGON ((20 20, 20 180, 220 180, 220 20, 20 20))" |> Geo.WKT.decode!()
     b = "POLYGON ((160 60, 20 20, 100 140, 160 60))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-034 - A/A-5-2-2: a polygon containing another polygon (float)" do
+    a = "POLYGON((20.0 20.0,20.0 180.0,220.0 180.0,220.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((160.0 60.0,20.0 20.0,100.0 140.0,160.0 60.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -557,9 +1133,39 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-035 - A/A-5-2-3: a polygon containing another polygon (float)" do
+    a = "POLYGON((20.0 20.0,20.0 180.0,220.0 180.0,220.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((20.0 100.0,140.0 160.0,160.0 40.0,20.0 100.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-036 - A/A-5-2-4: a polygon containing another polygon" do
     a = "POLYGON ((20 20, 20 180, 220 180, 220 20, 20 20))" |> Geo.WKT.decode!()
     b = "POLYGON ((160 40, 20 100, 160 160, 160 40))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-036 - A/A-5-2-4: a polygon containing another polygon (float)" do
+    a = "POLYGON((20.0 20.0,20.0 180.0,220.0 180.0,220.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((160.0 40.0,20.0 100.0,160.0 160.0,160.0 40.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -587,9 +1193,39 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-037 - A/A-5-2-5: a polygon containing another polygon (float)" do
+    a = "POLYGON((20.0 20.0,20.0 180.0,220.0 180.0,220.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((20.0 180.0,180.0 120.0,80.0 40.0,20.0 180.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-038 - A/A-5-2-6: a polygon containing another polygon" do
     a = "POLYGON ((20 20, 20 180, 220 180, 220 20, 20 20))" |> Geo.WKT.decode!()
     b = "POLYGON ((180 120, 100 40, 20 180, 180 120))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-038 - A/A-5-2-6: a polygon containing another polygon (float)" do
+    a = "POLYGON((20.0 20.0,20.0 180.0,220.0 180.0,220.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((180.0 120.0,100.0 40.0,20.0 180.0,180.0 120.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -617,9 +1253,45 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-039 - A/A-5-3-1: a polygon containing another polygon (float)" do
+    a = "POLYGON((20.0 20.0,20.0 180.0,220.0 180.0,220.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((20.0 20.0,140.0 40.0,140.0 120.0,20.0 160.0,80.0 80.0,20.0 20.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-040 - A/A-5-3-2: a polygon containing another polygon" do
     a = "POLYGON ((20 20, 20 180, 220 180, 220 20, 20 20))" |> Geo.WKT.decode!()
     b = "POLYGON ((20 20, 140 40, 140 140, 20 180, 80 100, 20 20))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-040 - A/A-5-3-2: a polygon containing another polygon (float)" do
+    a = "POLYGON((20.0 20.0,20.0 180.0,220.0 180.0,220.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((20.0 20.0,140.0 40.0,140.0 140.0,20.0 180.0,80.0 100.0,20.0 20.0))"
+      |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -647,9 +1319,45 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-041 - A/A-5-3-3: a polygon containing another polygon (float)" do
+    a = "POLYGON((20.0 20.0,20.0 180.0,220.0 180.0,220.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((40.0 180.0,60.0 100.0,180.0 100.0,200.0 180.0,120.0 120.0,40.0 180.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-042 - A/A-5-3-4: a polygon containing another polygon" do
     a = "POLYGON ((20 20, 20 180, 220 180, 220 20, 20 20))" |> Geo.WKT.decode!()
     b = "POLYGON ((20 180, 60 80, 180 80, 220 180, 120 120, 20 180))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-042 - A/A-5-3-4: a polygon containing another polygon (float)" do
+    a = "POLYGON((20.0 20.0,20.0 180.0,220.0 180.0,220.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((20.0 180.0,60.0 80.0,180.0 80.0,220.0 180.0,120.0 120.0,20.0 180.0))"
+      |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -680,9 +1388,45 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-043 - A/A-5-3-5: a polygon containing another polygon (float)" do
+    a = "POLYGON((20.0 20.0,20.0 180.0,220.0 180.0,220.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((40.0 60.0,20.0 180.0,100.0 100.0,140.0 180.0,160.0 120.0,220.0 100.0,140.0 40.0,40.0 60.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-044 - A/A-5-3-6: a polygon containing another polygon" do
     a = "POLYGON ((20 20, 20 180, 220 180, 220 20, 20 20))" |> Geo.WKT.decode!()
     b = "POLYGON ((60 100, 180 100, 220 180, 120 140, 20 180, 60 100))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-044 - A/A-5-3-6: a polygon containing another polygon (float)" do
+    a = "POLYGON((20.0 20.0,20.0 180.0,220.0 180.0,220.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((60.0 100.0,180.0 100.0,220.0 180.0,120.0 140.0,20.0 180.0,60.0 100.0))"
+      |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -710,9 +1454,39 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-045 - A/A-5-4-1: a polygon containing another polygon (float)" do
+    a = "POLYGON((20.0 20.0,20.0 180.0,220.0 180.0,220.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((20.0 20.0,20.0 140.0,120.0 120.0,120.0 40.0,20.0 20.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-046 - A/A-5-4-2: a polygon containing another polygon" do
     a = "POLYGON ((20 20, 20 180, 220 180, 220 20, 20 20))" |> Geo.WKT.decode!()
     b = "POLYGON ((20 20, 20 180, 140 140, 140 60, 20 20))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-046 - A/A-5-4-2: a polygon containing another polygon (float)" do
+    a = "POLYGON((20.0 20.0,20.0 180.0,220.0 180.0,220.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((20.0 20.0,20.0 180.0,140.0 140.0,140.0 60.0,20.0 20.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -740,9 +1514,39 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-047 - A/A-5-4-3: a polygon containing another polygon (float)" do
+    a = "POLYGON((20.0 20.0,20.0 180.0,220.0 180.0,220.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((20.0 20.0,120.0 40.0,120.0 120.0,20.0 140.0,20.0 20.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-048 - A/A-5-4-4: a polygon containing another polygon" do
     a = "POLYGON ((20 20, 20 180, 220 180, 220 20, 20 20))" |> Geo.WKT.decode!()
     b = "POLYGON ((120 40, 20 20, 20 140, 120 120, 120 40))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-048 - A/A-5-4-4: a polygon containing another polygon (float)" do
+    a = "POLYGON((20.0 20.0,20.0 180.0,220.0 180.0,220.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((120.0 40.0,20.0 20.0,20.0 140.0,120.0 120.0,120.0 40.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -770,9 +1574,39 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-049 - A/A-5-4-5: a polygon containing another polygon (float)" do
+    a = "POLYGON((20.0 20.0,20.0 180.0,220.0 180.0,220.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((20.0 20.0,140.0 60.0,140.0 140.0,20.0 180.0,20.0 20.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-050 - A/A-5-4-6: a polygon containing another polygon" do
     a = "POLYGON ((20 20, 20 180, 220 180, 220 20, 20 20))" |> Geo.WKT.decode!()
     b = "POLYGON ((140 60, 20 20, 20 180, 140 140, 140 60))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-050 - A/A-5-4-6: a polygon containing another polygon (float)" do
+    a = "POLYGON((20.0 20.0,20.0 180.0,220.0 180.0,220.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((140.0 60.0,20.0 20.0,20.0 180.0,140.0 140.0,140.0 60.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -800,9 +1634,39 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-051 - A/A-5-4-7: a polygon containing another polygon (float)" do
+    a = "POLYGON((20.0 20.0,20.0 180.0,220.0 180.0,220.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((20.0 20.0,60.0 120.0,140.0 120.0,180.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-052 - A/A-5-4-8: a polygon containing another polygon" do
     a = "POLYGON ((20 20, 20 180, 220 180, 220 20, 20 20))" |> Geo.WKT.decode!()
     b = "POLYGON ((20 40, 120 40, 120 120, 20 140, 20 40))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-052 - A/A-5-4-8: a polygon containing another polygon (float)" do
+    a = "POLYGON((20.0 20.0,20.0 180.0,220.0 180.0,220.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((20.0 40.0,120.0 40.0,120.0 120.0,20.0 140.0,20.0 40.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -833,9 +1697,42 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-053 - A/A-5-5-1: a polygon containing another polygon (float)" do
+    a = "POLYGON((20.0 20.0,20.0 180.0,220.0 180.0,220.0 20.0,20.0 20.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((20.0 20.0,20.0 180.0,60.0 120.0,100.0 180.0,140.0 120.0,220.0 180.0,200.0 120.0,140.0 60.0,20.0 20.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-054 - A/A-6-1: a polygon overlapping another polygon" do
     a = "POLYGON ((150 150, 330 150, 250 70, 70 70, 150 150))" |> Geo.WKT.decode!()
     b = "POLYGON ((150 150, 270 150, 140 20, 20 20, 150 150))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-054 - A/A-6-1: a polygon overlapping another polygon (float)" do
+    a = "POLYGON((150.0 150.0,330.0 150.0,250.0 70.0,70.0 70.0,150.0 150.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((150.0 150.0,270.0 150.0,140.0 20.0,20.0 20.0,150.0 150.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -865,6 +1762,26 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-055 - A/A-6-2: a polygon overlapping another polygon (float)" do
+    a =
+      "POLYGON((150.0 150.0,270.0 150.0,330.0 150.0,250.0 70.0,190.0 70.0,70.0 70.0,150.0 150.0))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((150.0 150.0,270.0 150.0,190.0 70.0,140.0 20.0,20.0 20.0,70.0 70.0,150.0 150.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-056 - A/A-6-3: spiky polygons overlapping; boundary &lt;-&gt; boundary intersecting at 0 dimension" do
     a =
       "POLYGON ((20 20, 60 50, 20 40, 60 70, 20 60, 60 90, 20 90, 70 110, 20 130, 80 130, 20 150, 80 160, 20 170, 80 180, 20 200, 80 200, 30 240, 80 220, 50 260, 100 220, 100 260, 120 220, 130 260, 140 220, 150 280, 150 190, 160 280, 170 190, 180 280, 190 190, 200 280, 210 190, 220 280, 230 190, 240 260, 250 230, 260 260, 260 220, 290 270, 290 220, 330 260, 300 210, 340 240, 290 180, 340 210, 290 170, 350 170, 240 150, 350 150, 240 140, 350 130, 240 120, 350 120, 240 110, 350 110, 240 100, 350 100, 240 90, 350 90, 240 80, 350 80, 300 70, 340 60, 290 60, 340 40, 300 50, 340 20, 270 60, 310 20, 250 60, 270 20, 230 60, 240 20, 210 60, 210 20, 190 70, 190 20, 180 90, 170 20, 160 90, 150 20, 140 90, 130 20, 120 90, 110 20, 100 90, 100 20, 90 60, 80 20, 70 40, 20 20))"
@@ -872,6 +1789,26 @@ defmodule Intersect.Validation.PolygonPolygonATest do
 
     b =
       "POLYGON ((190 140, 140 130, 200 160, 130 150, 210 170, 130 170, 210 180, 120 190, 220 200, 120 200, 250 210, 120 210, 250 220, 120 220, 250 230, 120 240, 230 240, 120 250, 240 260, 120 260, 240 270, 120 270, 270 290, 120 290, 230 300, 150 310, 250 310, 180 320, 250 320, 200 360, 260 330, 240 360, 280 320, 290 370, 290 320, 320 360, 310 320, 360 360, 310 310, 380 340, 310 290, 390 330, 310 280, 410 310, 310 270, 420 280, 310 260, 430 250, 300 250, 440 240, 300 240, 450 230, 280 220, 440 220, 280 210, 440 210, 300 200, 430 190, 300 190, 440 180, 330 180, 430 150, 320 180, 420 130, 300 180, 410 120, 280 180, 400 110, 280 170, 390 90, 280 160, 400 70, 270 160, 450 30, 260 160, 420 30, 250 160, 390 30, 240 160, 370 30, 230 160, 360 30, 230 150, 330 50, 240 130, 330 30, 230 130, 310 30, 220 130, 280 30, 230 100, 270 40, 220 110, 250 30, 210 130, 240 30, 210 100, 220 40, 200 90, 200 20, 190 100, 180 30, 20 20, 180 40, 20 30, 180 50, 20 50, 180 60, 30 60, 180 70, 20 70, 170 80, 80 80, 170 90, 20 80, 180 100, 40 100, 200 110, 60 110, 200 120, 120 120, 190 140))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-056 - A/A-6-3: spiky polygons overlapping; boundary &lt;-&gt; boundary intersecting at 0 dimension (float)" do
+    a =
+      "POLYGON((20.0 20.0,60.0 50.0,20.0 40.0,60.0 70.0,20.0 60.0,60.0 90.0,20.0 90.0,70.0 110.0,20.0 130.0,80.0 130.0,20.0 150.0,80.0 160.0,20.0 170.0,80.0 180.0,20.0 200.0,80.0 200.0,30.0 240.0,80.0 220.0,50.0 260.0,100.0 220.0,100.0 260.0,120.0 220.0,130.0 260.0,140.0 220.0,150.0 280.0,150.0 190.0,160.0 280.0,170.0 190.0,180.0 280.0,190.0 190.0,200.0 280.0,210.0 190.0,220.0 280.0,230.0 190.0,240.0 260.0,250.0 230.0,260.0 260.0,260.0 220.0,290.0 270.0,290.0 220.0,330.0 260.0,300.0 210.0,340.0 240.0,290.0 180.0,340.0 210.0,290.0 170.0,350.0 170.0,240.0 150.0,350.0 150.0,240.0 140.0,350.0 130.0,240.0 120.0,350.0 120.0,240.0 110.0,350.0 110.0,240.0 100.0,350.0 100.0,240.0 90.0,350.0 90.0,240.0 80.0,350.0 80.0,300.0 70.0,340.0 60.0,290.0 60.0,340.0 40.0,300.0 50.0,340.0 20.0,270.0 60.0,310.0 20.0,250.0 60.0,270.0 20.0,230.0 60.0,240.0 20.0,210.0 60.0,210.0 20.0,190.0 70.0,190.0 20.0,180.0 90.0,170.0 20.0,160.0 90.0,150.0 20.0,140.0 90.0,130.0 20.0,120.0 90.0,110.0 20.0,100.0 90.0,100.0 20.0,90.0 60.0,80.0 20.0,70.0 40.0,20.0 20.0))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((190.0 140.0,140.0 130.0,200.0 160.0,130.0 150.0,210.0 170.0,130.0 170.0,210.0 180.0,120.0 190.0,220.0 200.0,120.0 200.0,250.0 210.0,120.0 210.0,250.0 220.0,120.0 220.0,250.0 230.0,120.0 240.0,230.0 240.0,120.0 250.0,240.0 260.0,120.0 260.0,240.0 270.0,120.0 270.0,270.0 290.0,120.0 290.0,230.0 300.0,150.0 310.0,250.0 310.0,180.0 320.0,250.0 320.0,200.0 360.0,260.0 330.0,240.0 360.0,280.0 320.0,290.0 370.0,290.0 320.0,320.0 360.0,310.0 320.0,360.0 360.0,310.0 310.0,380.0 340.0,310.0 290.0,390.0 330.0,310.0 280.0,410.0 310.0,310.0 270.0,420.0 280.0,310.0 260.0,430.0 250.0,300.0 250.0,440.0 240.0,300.0 240.0,450.0 230.0,280.0 220.0,440.0 220.0,280.0 210.0,440.0 210.0,300.0 200.0,430.0 190.0,300.0 190.0,440.0 180.0,330.0 180.0,430.0 150.0,320.0 180.0,420.0 130.0,300.0 180.0,410.0 120.0,280.0 180.0,400.0 110.0,280.0 170.0,390.0 90.0,280.0 160.0,400.0 70.0,270.0 160.0,450.0 30.0,260.0 160.0,420.0 30.0,250.0 160.0,390.0 30.0,240.0 160.0,370.0 30.0,230.0 160.0,360.0 30.0,230.0 150.0,330.0 50.0,240.0 130.0,330.0 30.0,230.0 130.0,310.0 30.0,220.0 130.0,280.0 30.0,230.0 100.0,270.0 40.0,220.0 110.0,250.0 30.0,210.0 130.0,240.0 30.0,210.0 100.0,220.0 40.0,200.0 90.0,200.0 20.0,190.0 100.0,180.0 30.0,20.0 20.0,180.0 40.0,20.0 30.0,180.0 50.0,20.0 50.0,180.0 60.0,30.0 60.0,180.0 70.0,20.0 70.0,170.0 80.0,80.0 80.0,170.0 90.0,20.0 80.0,180.0 100.0,40.0 100.0,200.0 110.0,60.0 110.0,200.0 120.0,120.0 120.0,190.0 140.0))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
@@ -905,9 +1842,47 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-057 - A/A-6-4: spiky polygons overlapping; boundary &lt;-&gt; boundary intersecting at 1 dimension at a few locations (float)" do
+    a =
+      "POLYGON((70.0 150.0,20.0 160.0,110.0 160.0,20.0 180.0,100.0 200.0,20.0 200.0,190.0 210.0,20.0 210.0,160.0 220.0,20.0 220.0,150.0 230.0,60.0 240.0,180.0 250.0,20.0 260.0,170.0 260.0,60.0 270.0,160.0 270.0,100.0 310.0,170.0 280.0,200.0 260.0,180.0 230.0,210.0 260.0,130.0 330.0,230.0 250.0,210.0 290.0,240.0 250.0,230.0 210.0,260.0 300.0,250.0 230.0,270.0 300.0,270.0 240.0,300.0 340.0,280.0 250.0,320.0 330.0,290.0 250.0,340.0 350.0,290.0 240.0,350.0 360.0,270.0 190.0,350.0 340.0,290.0 200.0,350.0 330.0,300.0 190.0,360.0 320.0,310.0 190.0,360.0 300.0,320.0 200.0,360.0 280.0,330.0 200.0,360.0 260.0,340.0 200.0,370.0 260.0,340.0 180.0,390.0 290.0,340.0 170.0,400.0 260.0,350.0 170.0,400.0 250.0,350.0 160.0,410.0 240.0,350.0 150.0,400.0 170.0,350.0 140.0,310.0 170.0,340.0 140.0,270.0 180.0,330.0 140.0,260.0 170.0,310.0 140.0,240.0 170.0,290.0 140.0,200.0 190.0,270.0 140.0,180.0 190.0,260.0 140.0,170.0 190.0,260.0 130.0,170.0 180.0,250.0 130.0,170.0 170.0,240.0 120.0,170.0 160.0,210.0 120.0,170.0 150.0,210.0 110.0,340.0 130.0,230.0 110.0,420.0 140.0,220.0 100.0,410.0 130.0,220.0 90.0,400.0 120.0,220.0 80.0,390.0 110.0,220.0 70.0,420.0 110.0,240.0 70.0,420.0 100.0,260.0 70.0,420.0 90.0,280.0 70.0,430.0 80.0,230.0 60.0,430.0 60.0,270.0 50.0,450.0 40.0,210.0 50.0,370.0 40.0,260.0 40.0,460.0 30.0,160.0 40.0,210.0 60.0,200.0 110.0,190.0 60.0,190.0 120.0,170.0 50.0,180.0 130.0,150.0 30.0,170.0 130.0,140.0 20.0,160.0 120.0,130.0 20.0,160.0 150.0,120.0 20.0,160.0 170.0,110.0 20.0,160.0 190.0,100.0 20.0,150.0 190.0,90.0 20.0,140.0 180.0,80.0 20.0,120.0 140.0,70.0 20.0,120.0 150.0,60.0 20.0,110.0 150.0,50.0 20.0,100.0 140.0,50.0 30.0,90.0 130.0,40.0 30.0,80.0 120.0,30.0 30.0,80.0 130.0,30.0 40.0,80.0 140.0,20.0 40.0,70.0 140.0,40.0 90.0,60.0 130.0,20.0 90.0,60.0 140.0,20.0 130.0,70.0 150.0))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((190.0 140.0,140.0 130.0,200.0 160.0,130.0 150.0,210.0 170.0,130.0 170.0,210.0 180.0,120.0 190.0,220.0 200.0,120.0 200.0,250.0 210.0,120.0 210.0,250.0 220.0,120.0 220.0,250.0 230.0,120.0 240.0,230.0 240.0,120.0 250.0,240.0 260.0,120.0 260.0,240.0 270.0,120.0 270.0,270.0 290.0,120.0 290.0,230.0 300.0,150.0 310.0,250.0 310.0,180.0 320.0,250.0 320.0,200.0 360.0,260.0 330.0,240.0 360.0,280.0 320.0,290.0 370.0,290.0 320.0,320.0 360.0,310.0 320.0,360.0 360.0,310.0 310.0,380.0 340.0,310.0 290.0,390.0 330.0,310.0 280.0,410.0 310.0,310.0 270.0,420.0 280.0,310.0 260.0,430.0 250.0,300.0 250.0,440.0 240.0,300.0 240.0,450.0 230.0,280.0 220.0,440.0 220.0,280.0 210.0,440.0 210.0,300.0 200.0,430.0 190.0,300.0 190.0,440.0 180.0,330.0 180.0,430.0 150.0,320.0 180.0,420.0 130.0,300.0 180.0,410.0 120.0,280.0 180.0,400.0 110.0,280.0 170.0,390.0 90.0,280.0 160.0,400.0 70.0,270.0 160.0,450.0 30.0,260.0 160.0,420.0 30.0,250.0 160.0,390.0 30.0,240.0 160.0,370.0 30.0,230.0 160.0,360.0 30.0,230.0 150.0,330.0 50.0,240.0 130.0,330.0 30.0,230.0 130.0,310.0 30.0,220.0 130.0,280.0 30.0,230.0 100.0,270.0 40.0,220.0 110.0,250.0 30.0,210.0 130.0,240.0 30.0,210.0 100.0,220.0 40.0,200.0 90.0,200.0 20.0,190.0 100.0,180.0 30.0,20.0 20.0,180.0 40.0,20.0 30.0,180.0 50.0,20.0 50.0,180.0 60.0,30.0 60.0,180.0 70.0,20.0 70.0,170.0 80.0,80.0 80.0,170.0 90.0,20.0 80.0,180.0 100.0,40.0 100.0,200.0 110.0,60.0 110.0,200.0 120.0,120.0 120.0,190.0 140.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-058 - A/A-6-5: a polygon overlapping another polygon" do
     a = "POLYGON ((60 160, 220 160, 220 20, 60 20, 60 160))" |> Geo.WKT.decode!()
     b = "POLYGON ((60 160, 20 200, 260 200, 220 160, 140 80, 60 160))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-058 - A/A-6-5: a polygon overlapping another polygon (float)" do
+    a = "POLYGON((60.0 160.0,220.0 160.0,220.0 20.0,60.0 20.0,60.0 160.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((60.0 160.0,20.0 200.0,260.0 200.0,220.0 160.0,140.0 80.0,60.0 160.0))"
+      |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -935,9 +1910,39 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-059 - A/A-6-6: a polygon overlapping another polygon (float)" do
+    a = "POLYGON((60.0 160.0,220.0 160.0,220.0 20.0,60.0 20.0,60.0 160.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((60.0 160.0,20.0 200.0,260.0 200.0,140.0 80.0,60.0 160.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-060 - A/A-6-7: a polygon overlapping another polygon" do
     a = "POLYGON ((60 160, 220 160, 220 20, 60 20, 60 160))" |> Geo.WKT.decode!()
     b = "POLYGON ((20 200, 140 80, 260 200, 20 200))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-060 - A/A-6-7: a polygon overlapping another polygon (float)" do
+    a = "POLYGON((60.0 160.0,220.0 160.0,220.0 20.0,60.0 20.0,60.0 160.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((20.0 200.0,140.0 80.0,260.0 200.0,20.0 200.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -965,9 +1970,42 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-061 - A/A-6-8: a polygon overlapping another polygon (float)" do
+    a = "POLYGON((60.0 160.0,220.0 160.0,220.0 20.0,60.0 20.0,60.0 160.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((20.0 200.0,60.0 160.0,140.0 80.0,220.0 160.0,260.0 200.0,20.0 200.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-062 - A/A-6-9: a polygon overlapping another polygon" do
     a = "POLYGON ((60 160, 220 160, 220 20, 60 20, 60 160))" |> Geo.WKT.decode!()
     b = "POLYGON ((20 200, 60 160, 140 80, 260 200, 20 200))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-062 - A/A-6-9: a polygon overlapping another polygon (float)" do
+    a = "POLYGON((60.0 160.0,220.0 160.0,220.0 20.0,60.0 20.0,60.0 160.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((20.0 200.0,60.0 160.0,140.0 80.0,260.0 200.0,20.0 200.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -995,9 +2033,39 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-063 - A/A-6-10: a polygon overlapping a skinny polygon (float)" do
+    a = "POLYGON((0.0 0.0,0.0 200.0,200.0 200.0,200.0 0.0,0.0 0.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((100.0 100.0,1.0e6 110.0,1.0e7 100.0,100.0 100.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-064 - A/A-6-11: a polygon overlapping a skinny polygon" do
     a = "POLYGON ((100 0, 100 200, 200 200, 200 0, 100 0))" |> Geo.WKT.decode!()
     b = "POLYGON ((100 100, 1000000 110, 10000000 100, 100 100))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-064 - A/A-6-11: a polygon overlapping a skinny polygon (float)" do
+    a = "POLYGON((100.0 0.0,100.0 200.0,200.0 200.0,200.0 0.0,100.0 0.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((100.0 100.0,1.0e6 110.0,1.0e7 100.0,100.0 100.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -1025,9 +2093,39 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-065 - A/A-6-12: a polygon overlapping a skinny polygon (float)" do
+    a = "POLYGON((120.0 0.0,120.0 200.0,200.0 200.0,200.0 0.0,120.0 0.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((100.0 100.0,1.0e6 110.0,1.0e7 100.0,100.0 100.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-066 - A/A-6-13: a polygon overlapping a skinny polygon" do
     a = "POLYGON ((0 0, 0 200, 110 200, 110 0, 0 0))" |> Geo.WKT.decode!()
     b = "POLYGON ((100 100, 1000000 110, 10000000 100, 100 100))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-066 - A/A-6-13: a polygon overlapping a skinny polygon (float)" do
+    a = "POLYGON((0.0 0.0,0.0 200.0,110.0 200.0,110.0 0.0,0.0 0.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((100.0 100.0,1.0e6 110.0,1.0e7 100.0,100.0 100.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -1055,9 +2153,45 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-067 - A/A-6-14: a polygon overlapping a skinny polygon (float)" do
+    a =
+      "POLYGON((100.0 100.0,100.0 200.0,200.0 200.0,200.0 100.0,100.0 100.0))"
+      |> Geo.WKT.decode!()
+
+    b = "POLYGON((100.0 100.0,2.1e3 110.0,2.1e3 100.0,100.0 100.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-068 - A/A-6-15: a polygon overlapping a skinny polygon" do
     a = "POLYGON ((100 100, 100 200, 200 200, 200 100, 100 100))" |> Geo.WKT.decode!()
     b = "POLYGON ((100 100, 2101 110, 2101 100, 100 100))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-068 - A/A-6-15: a polygon overlapping a skinny polygon (float)" do
+    a =
+      "POLYGON((100.0 100.0,100.0 200.0,200.0 200.0,200.0 100.0,100.0 100.0))"
+      |> Geo.WKT.decode!()
+
+    b = "POLYGON((100.0 100.0,2101.0 110.0,2101.0 100.0,100.0 100.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -1085,9 +2219,42 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-069 - A/A-6-16: two skinny polygons overlapping (float)" do
+    a = "POLYGON((100.0 100.0,200.0 200.0,200.0 100.0,100.0 100.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((100.0 100.0,2101.0 110.0,2101.0 100.0,100.0 100.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-070 - A/A-6-17: a polygon overlapping a skinny polygon" do
     a = "POLYGON ((100 100, 100 200, 200 200, 200 100, 100 100))" |> Geo.WKT.decode!()
     b = "POLYGON ((100 100, 1000000 110, 1000000 100, 100 100))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-070 - A/A-6-17: a polygon overlapping a skinny polygon (float)" do
+    a =
+      "POLYGON((100.0 100.0,100.0 200.0,200.0 200.0,200.0 100.0,100.0 100.0))"
+      |> Geo.WKT.decode!()
+
+    b = "POLYGON((100.0 100.0,1.0e6 110.0,1.0e6 100.0,100.0 100.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -1115,9 +2282,45 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-071 - A/A-6-19: a polygon overlapping a skinny polygon (float)" do
+    a =
+      "POLYGON((120.0 100.0,120.0 200.0,200.0 200.0,200.0 100.0,120.0 100.0))"
+      |> Geo.WKT.decode!()
+
+    b = "POLYGON((100.0 100.0,500.0 110.0,500.0 100.0,100.0 100.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-072 - A/A-6-20: a polygon overlapping a skinny polygon" do
     a = "POLYGON ((120 100, 120 200, 200 200, 200 100, 120 100))" |> Geo.WKT.decode!()
     b = "POLYGON ((100 100, 501 110, 501 100, 100 100))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-072 - A/A-6-20: a polygon overlapping a skinny polygon (float)" do
+    a =
+      "POLYGON((120.0 100.0,120.0 200.0,200.0 200.0,200.0 100.0,120.0 100.0))"
+      |> Geo.WKT.decode!()
+
+    b = "POLYGON((100.0 100.0,501.0 110.0,501.0 100.0,100.0 100.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -1145,9 +2348,44 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-073 - A/A-6-21: a polygon overlapping a skinny polygon (float)" do
+    a =
+      "POLYGON((120.0 100.0,130.0 200.0,200.0 200.0,200.0 100.0,120.0 100.0))"
+      |> Geo.WKT.decode!()
+
+    b = "POLYGON((100.0 100.0,501.0 110.0,501.0 100.0,100.0 100.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-074 - A/A-6-22: a polygon overlapping a skinny polygon" do
     a = "POLYGON ((120 100, 17 200, 200 200, 200 100, 120 100))" |> Geo.WKT.decode!()
     b = "POLYGON ((100 100, 501 110, 501 100, 100 100))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-074 - A/A-6-22: a polygon overlapping a skinny polygon (float)" do
+    a =
+      "POLYGON((120.0 100.0,17.0 200.0,200.0 200.0,200.0 100.0,120.0 100.0))" |> Geo.WKT.decode!()
+
+    b = "POLYGON((100.0 100.0,501.0 110.0,501.0 100.0,100.0 100.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -1175,9 +2413,42 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-075 - A/A-6-23: a polygon overlapping a skinny polygon (float)" do
+    a =
+      "POLYGON((120.0 100.0,120.0 200.0,200.0 200.0,200.0 100.0,120.0 100.0))"
+      |> Geo.WKT.decode!()
+
+    b = "POLYGON((100.0 100.0,1.0e6 110.0,1.0e6 100.0,100.0 100.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-076 - A/A-6-25: two skinny polygons overlapping" do
     a = "POLYGON ((101 99, 101 1000000, 102 1000000, 101 99))" |> Geo.WKT.decode!()
     b = "POLYGON ((100 100, 1000000 110, 1000000 100, 100 100))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-076 - A/A-6-25: two skinny polygons overlapping (float)" do
+    a = "POLYGON((101.0 99.0,101.0 1.0e6,102.0 1.0e6,101.0 99.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((100.0 100.0,1.0e6 110.0,1.0e6 100.0,100.0 100.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -1205,9 +2476,42 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-077 - A/A-6-26: two skinny polygons overlapping (float)" do
+    a = "POLYGON((100.0 100.0,200.0 101.0,200.0 100.0,100.0 100.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((100.0 100.0,2101.0 110.0,2101.0 100.0,100.0 100.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-078 - A/A-6-26: two polygons overlapping" do
     a = "POLYGON ((16 319, 150 39, 25 302, 160 20, 265 20, 127 317, 16 319))" |> Geo.WKT.decode!()
     b = "POLYGON ((10 307, 22 307, 153 34, 22 34, 10 307))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-078 - A/A-6-26: two polygons overlapping (float)" do
+    a =
+      "POLYGON((16.0 319.0,150.0 39.0,25.0 302.0,160.0 20.0,265.0 20.0,127.0 317.0,16.0 319.0))"
+      |> Geo.WKT.decode!()
+
+    b = "POLYGON((10.0 307.0,22.0 307.0,153.0 34.0,22.0 34.0,10.0 307.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -1225,6 +2529,24 @@ defmodule Intersect.Validation.PolygonPolygonATest do
 
     b =
       "POLYGON ((160 200, 310 20, 20 20, 160 200),(160 200, 260 40, 70 40, 160 200))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-079 - A/Ah-3-1: the closing point of a polygon touching the closing points of another polygon and its hole (float)" do
+    a = "POLYGON((160.0 200.0,210.0 70.0,120.0 70.0,160.0 200.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((160.0 200.0,310.0 20.0,20.0 20.0,160.0 200.0),(160.0 200.0,260.0 40.0,70.0 40.0,160.0 200.0))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
@@ -1256,11 +2578,48 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-080 - A/Ah-3-2: the boundary of a polygon touching the inner boundary of another polygon at two spots (float)" do
+    a =
+      "POLYGON((170.0 120.0,240.0 100.0,260.0 50.0,190.0 70.0,170.0 120.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((150.0 150.0,410.0 150.0,280.0 20.0,20.0 20.0,150.0 150.0),(170.0 120.0,330.0 120.0,260.0 50.0,100.0 50.0,170.0 120.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-081 - A/Ah-3-3: the boundary of a polygon touching the inner boundary of another polygon at two spots" do
     a = "POLYGON ((270 90, 200 50, 150 80, 210 120, 270 90))" |> Geo.WKT.decode!()
 
     b =
       "POLYGON ((150 150, 410 150, 280 20, 20 20, 150 150),(170 120, 330 120, 260 50, 100 50, 170 120))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-081 - A/Ah-3-3: the boundary of a polygon touching the inner boundary of another polygon at two spots (float)" do
+    a = "POLYGON((270.0 90.0,200.0 50.0,150.0 80.0,210.0 120.0,270.0 90.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((150.0 150.0,410.0 150.0,280.0 20.0,20.0 20.0,150.0 150.0),(170.0 120.0,330.0 120.0,260.0 50.0,100.0 50.0,170.0 120.0))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
@@ -1292,11 +2651,49 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-082 - A/Ah-3-4: the boundary of a polygon touching the inner boundary of another polygon at one spot (float)" do
+    a =
+      "POLYGON((170.0 120.0,260.0 100.0,240.0 60.0,150.0 80.0,170.0 120.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((150.0 150.0,410.0 150.0,280.0 20.0,20.0 20.0,150.0 150.0),(170.0 120.0,330.0 120.0,260.0 50.0,100.0 50.0,170.0 120.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-083 - A/Ah-3-5: the boundary of a polygon touching the inner boundary of another polygon at one spot" do
     a = "POLYGON ((220 120, 270 80, 200 60, 160 100, 220 120))" |> Geo.WKT.decode!()
 
     b =
       "POLYGON ((150 150, 410 150, 280 20, 20 20, 150 150),(170 120, 330 120, 260 50, 100 50, 170 120))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-083 - A/Ah-3-5: the boundary of a polygon touching the inner boundary of another polygon at one spot (float)" do
+    a =
+      "POLYGON((220.0 120.0,270.0 80.0,200.0 60.0,160.0 100.0,220.0 120.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((150.0 150.0,410.0 150.0,280.0 20.0,20.0 20.0,150.0 150.0),(170.0 120.0,330.0 120.0,260.0 50.0,100.0 50.0,170.0 120.0))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
@@ -1328,11 +2725,47 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-084 - A/Ah-3-6: the boundary of a polygon touching the inner boundary of another polygon at one spot (float)" do
+    a = "POLYGON((260.0 50.0,180.0 70.0,180.0 110.0,260.0 90.0,260.0 50.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((150.0 150.0,410.0 150.0,280.0 20.0,20.0 20.0,150.0 150.0),(170.0 120.0,330.0 120.0,260.0 50.0,100.0 50.0,170.0 120.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-085 - A/Ah-3-7: the boundary of a polygon touching the inner boundary of another polygon at two spots" do
     a = "POLYGON ((230 110, 290 80, 190 60, 140 90, 230 110))" |> Geo.WKT.decode!()
 
     b =
       "POLYGON ((150 150, 410 150, 280 20, 20 20, 150 150),(170 120, 330 120, 260 50, 100 50, 170 120))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-085 - A/Ah-3-7: the boundary of a polygon touching the inner boundary of another polygon at two spots (float)" do
+    a = "POLYGON((230.0 110.0,290.0 80.0,190.0 60.0,140.0 90.0,230.0 110.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((150.0 150.0,410.0 150.0,280.0 20.0,20.0 20.0,150.0 150.0),(170.0 120.0,330.0 120.0,260.0 50.0,100.0 50.0,170.0 120.0))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
@@ -1364,11 +2797,49 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-086 - A/Ah-3-8: the boundary of a polygon touching the inner boundary of another polygon (float)" do
+    a =
+      "POLYGON((170.0 120.0,330.0 120.0,260.0 50.0,100.0 50.0,170.0 120.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((150.0 150.0,410.0 150.0,280.0 20.0,20.0 20.0,150.0 150.0),(170.0 120.0,330.0 120.0,260.0 50.0,100.0 50.0,170.0 120.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-087 - A/Ah-3-9: part of the boundary of a polygon touching part of the inner boundary of another polygon" do
     a = "POLYGON ((170 120, 330 120, 280 70, 120 70, 170 120))" |> Geo.WKT.decode!()
 
     b =
       "POLYGON ((150 150, 410 150, 280 20, 20 20, 150 150),(170 120, 330 120, 260 50, 100 50, 170 120))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-087 - A/Ah-3-9: part of the boundary of a polygon touching part of the inner boundary of another polygon (float)" do
+    a =
+      "POLYGON((170.0 120.0,330.0 120.0,280.0 70.0,120.0 70.0,170.0 120.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((150.0 150.0,410.0 150.0,280.0 20.0,20.0 20.0,150.0 150.0),(170.0 120.0,330.0 120.0,260.0 50.0,100.0 50.0,170.0 120.0))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
@@ -1400,6 +2871,25 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-088 - A/Ah-3-10: part of the boundary of a polygon touching part of the inner boundary of another polygon (float)" do
+    a =
+      "POLYGON((170.0 120.0,300.0 120.0,250.0 70.0,120.0 70.0,170.0 120.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((150.0 150.0,410.0 150.0,280.0 20.0,20.0 20.0,150.0 150.0),(170.0 120.0,330.0 120.0,260.0 50.0,100.0 50.0,170.0 120.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-089 - A/Ah-3-11: part of the boundary of a polygon touching part of the inner boundary of another polygon" do
     a = "POLYGON ((190 100, 310 100, 260 50, 140 50, 190 100))" |> Geo.WKT.decode!()
 
@@ -1418,11 +2908,49 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-089 - A/Ah-3-11: part of the boundary of a polygon touching part of the inner boundary of another polygon (float)" do
+    a =
+      "POLYGON((190.0 100.0,310.0 100.0,260.0 50.0,140.0 50.0,190.0 100.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((150.0 150.0,410.0 150.0,280.0 20.0,20.0 20.0,150.0 150.0),(170.0 120.0,330.0 120.0,260.0 50.0,100.0 50.0,170.0 120.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-090 - A/Ah-5-1: an entire polygon within another polygon which has a hole" do
     a = "POLYGON ((280 130, 360 130, 270 40, 190 40, 280 130))" |> Geo.WKT.decode!()
 
     b =
       "POLYGON ((150 150, 410 150, 280 20, 20 20, 150 150),(170 120, 250 120, 180 50, 100 50, 170 120))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == true
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-090 - A/Ah-5-1: an entire polygon within another polygon which has a hole (float)" do
+    a =
+      "POLYGON((280.0 130.0,360.0 130.0,270.0 40.0,190.0 40.0,280.0 130.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((150.0 150.0,410.0 150.0,280.0 20.0,20.0 20.0,150.0 150.0),(170.0 120.0,250.0 120.0,180.0 50.0,100.0 50.0,170.0 120.0))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
@@ -1456,11 +2984,50 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-091 - A/Ah-5-2: an entire polygon within another polygon which has a hole (float)" do
+    a =
+      "POLYGON((220.0 80.0,180.0 40.0,80.0 40.0,170.0 130.0,270.0 130.0,230.0 90.0,300.0 90.0,250.0 30.0,280.0 30.0,390.0 140.0,150.0 140.0,40.0 30.0,230.0 30.0,280.0 80.0,220.0 80.0))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((150.0 150.0,410.0 150.0,280.0 20.0,20.0 20.0,150.0 150.0),(170.0 120.0,250.0 120.0,180.0 50.0,100.0 50.0,170.0 120.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == true
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-092 - A/Ah-5-3: polygon A within polygon B, the boundary of A touching the inner boundary of B" do
     a = "POLYGON ((260 130, 360 130, 280 40, 170 40, 260 130))" |> Geo.WKT.decode!()
 
     b =
       "POLYGON ((150 150, 410 150, 280 20, 20 20, 150 150),(170 120, 250 120, 180 50, 100 50, 170 120))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == true
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-092 - A/Ah-5-3: polygon A within polygon B, the boundary of A touching the inner boundary of B (float)" do
+    a =
+      "POLYGON((260.0 130.0,360.0 130.0,280.0 40.0,170.0 40.0,260.0 130.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((150.0 150.0,410.0 150.0,280.0 20.0,20.0 20.0,150.0 150.0),(170.0 120.0,250.0 120.0,180.0 50.0,100.0 50.0,170.0 120.0))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
@@ -1492,11 +3059,49 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-093 - A/Ah-5-4: polygon A within polygon B, the boundary of A touching the inner boundary of B (float)" do
+    a =
+      "POLYGON((240.0 110.0,340.0 110.0,290.0 60.0,190.0 60.0,240.0 110.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((150.0 150.0,410.0 150.0,280.0 20.0,20.0 20.0,150.0 150.0),(170.0 120.0,250.0 120.0,180.0 50.0,100.0 50.0,170.0 120.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == true
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-094 - A/Ah-5-5: polygon A within polygon B, the boundary of A touching the inner boundary of B" do
     a = "POLYGON ((250 120, 350 120, 280 50, 180 50, 250 120))" |> Geo.WKT.decode!()
 
     b =
       "POLYGON ((150 150, 410 150, 280 20, 20 20, 150 150),(170 120, 250 120, 180 50, 100 50, 170 120))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == true
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-094 - A/Ah-5-5: polygon A within polygon B, the boundary of A touching the inner boundary of B (float)" do
+    a =
+      "POLYGON((250.0 120.0,350.0 120.0,280.0 50.0,180.0 50.0,250.0 120.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((150.0 150.0,410.0 150.0,280.0 20.0,20.0 20.0,150.0 150.0),(170.0 120.0,250.0 120.0,180.0 50.0,100.0 50.0,170.0 120.0))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
@@ -1530,6 +3135,26 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-095 - Ah/Ah-1-1: same polygons (with a hole) (float)" do
+    a =
+      "POLYGON((230.0 210.0,230.0 20.0,20.0 20.0,20.0 210.0,230.0 210.0),(120.0 180.0,50.0 50.0,200.0 50.0,120.0 180.0))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((230.0 210.0,230.0 20.0,20.0 20.0,20.0 210.0,230.0 210.0),(120.0 180.0,50.0 50.0,200.0 50.0,120.0 180.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == true
+    assert Topo.equals?(a, b) == true
+    assert Topo.equals?(b, a) == true
+  end
+
+  @tag :validation
   test "07-096 - A2h/A2h-1-1: same polygons (with two holes)" do
     a =
       "POLYGON ((230 210, 230 20, 20 20, 20 210, 230 210),(140 40, 40 40, 40 170, 140 40),(110 190, 210 190, 210 50, 110 190))"
@@ -1537,6 +3162,26 @@ defmodule Intersect.Validation.PolygonPolygonATest do
 
     b =
       "POLYGON ((230 210, 230 20, 20 20, 20 210, 230 210),(140 40, 40 40, 40 170, 140 40),(110 190, 210 190, 210 50, 110 190))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == true
+    assert Topo.equals?(a, b) == true
+    assert Topo.equals?(b, a) == true
+  end
+
+  @tag :validation
+  test "07-096 - A2h/A2h-1-1: same polygons (with two holes) (float)" do
+    a =
+      "POLYGON((230.0 210.0,230.0 20.0,20.0 20.0,20.0 210.0,230.0 210.0),(140.0 40.0,40.0 40.0,40.0 170.0,140.0 40.0),(110.0 190.0,210.0 190.0,210.0 50.0,110.0 190.0))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((230.0 210.0,230.0 20.0,20.0 20.0,20.0 210.0,230.0 210.0),(140.0 40.0,40.0 40.0,40.0 170.0,140.0 40.0),(110.0 190.0,210.0 190.0,210.0 50.0,110.0 190.0))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
@@ -1568,11 +3213,49 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-097 - A/mA-3-1: a polygon touching multipolygon at two points (float)" do
+    a =
+      "POLYGON((280.0 190.0,330.0 150.0,200.0 110.0,150.0 150.0,280.0 190.0))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "MULTIPOLYGON(((140.0 110.0,260.0 110.0,170.0 20.0,50.0 20.0,140.0 110.0)),((300.0 270.0,420.0 270.0,340.0 190.0,220.0 190.0,300.0 270.0)))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-098 - A/mA-3-2: a polygon touching multipolygon at two points" do
     a = "POLYGON ((80 190, 220 190, 140 110, 0 110, 80 190))" |> Geo.WKT.decode!()
 
     b =
       "MULTIPOLYGON (((140 110, 260 110, 170 20, 50 20, 140 110)),((300 270, 420 270, 340 190, 220 190, 300 270)))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-098 - A/mA-3-2: a polygon touching multipolygon at two points (float)" do
+    a = "POLYGON((80.0 190.0,220.0 190.0,140.0 110.0,0.0 110.0,80.0 190.0))" |> Geo.WKT.decode!()
+
+    b =
+      "MULTIPOLYGON(((140.0 110.0,260.0 110.0,170.0 20.0,50.0 20.0,140.0 110.0)),((300.0 270.0,420.0 270.0,340.0 190.0,220.0 190.0,300.0 270.0)))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
@@ -1604,11 +3287,51 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-099 - A/mA-3-3: a polygon touching multipolygon at two points (float)" do
+    a =
+      "POLYGON((330.0 150.0,200.0 110.0,150.0 150.0,280.0 190.0,330.0 150.0))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "MULTIPOLYGON(((140.0 110.0,260.0 110.0,170.0 20.0,50.0 20.0,140.0 110.0)),((300.0 270.0,420.0 270.0,340.0 190.0,220.0 190.0,300.0 270.0)))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-100 - A/mA-3-4: a polygon touching multipolygon at one spoint" do
     a = "POLYGON ((290 190, 340 150, 220 120, 170 170, 290 190))" |> Geo.WKT.decode!()
 
     b =
       "MULTIPOLYGON (((140 110, 260 110, 170 20, 50 20, 140 110)),((300 270, 420 270, 340 190, 220 190, 300 270)))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-100 - A/mA-3-4: a polygon touching multipolygon at one spoint (float)" do
+    a =
+      "POLYGON((290.0 190.0,340.0 150.0,220.0 120.0,170.0 170.0,290.0 190.0))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "MULTIPOLYGON(((140.0 110.0,260.0 110.0,170.0 20.0,50.0 20.0,140.0 110.0)),((300.0 270.0,420.0 270.0,340.0 190.0,220.0 190.0,300.0 270.0)))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
@@ -1640,6 +3363,26 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-101 - A/mA-3-5: a polygon touching multipolygon along boundaries (float)" do
+    a =
+      "POLYGON((220.0 190.0,340.0 190.0,260.0 110.0,140.0 110.0,220.0 190.0))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "MULTIPOLYGON(((140.0 110.0,260.0 110.0,170.0 20.0,50.0 20.0,140.0 110.0)),((300.0 270.0,420.0 270.0,340.0 190.0,220.0 190.0,300.0 270.0)))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-102 - A/mA-3-6: a polygon touching multipolygon along boundaries and at a point" do
     a = "POLYGON ((140 190, 220 190, 100 70, 20 70, 140 190))" |> Geo.WKT.decode!()
 
@@ -1658,11 +3401,48 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-102 - A/mA-3-6: a polygon touching multipolygon along boundaries and at a point (float)" do
+    a = "POLYGON((140.0 190.0,220.0 190.0,100.0 70.0,20.0 70.0,140.0 190.0))" |> Geo.WKT.decode!()
+
+    b =
+      "MULTIPOLYGON(((140.0 110.0,260.0 110.0,170.0 20.0,50.0 20.0,140.0 110.0)),((300.0 270.0,420.0 270.0,340.0 190.0,220.0 190.0,300.0 270.0)))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-103 - A/mA-6-1: a polygon overlapping multipolygon" do
     a = "POLYGON ((140 220, 60 140, 140 60, 220 140, 140 220))" |> Geo.WKT.decode!()
 
     b =
       "MULTIPOLYGON (((100 20, 180 20, 180 100, 100 100, 100 20)),((20 100, 100 100, 100 180, 20 180, 20 100)),((100 180, 180 180, 180 260, 100 260, 100 180)),((180 100, 260 100, 260 180, 180 180, 180 100)))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-103 - A/mA-6-1: a polygon overlapping multipolygon (float)" do
+    a =
+      "POLYGON((140.0 220.0,60.0 140.0,140.0 60.0,220.0 140.0,140.0 220.0))" |> Geo.WKT.decode!()
+
+    b =
+      "MULTIPOLYGON(((100.0 20.0,180.0 20.0,180.0 100.0,100.0 100.0,100.0 20.0)),((20.0 100.0,100.0 100.0,100.0 180.0,20.0 180.0,20.0 100.0)),((100.0 180.0,180.0 180.0,180.0 260.0,100.0 260.0,100.0 180.0)),((180.0 100.0,260.0 100.0,260.0 180.0,180.0 180.0,180.0 100.0)))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
@@ -1696,6 +3476,26 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-104 - mA/mA-3-1: MultiPolygon touching MultiPolygon (float)" do
+    a =
+      "MULTIPOLYGON(((110.0 110.0,70.0 200.0,150.0 200.0,110.0 110.0)),((110.0 110.0,150.0 20.0,70.0 20.0,110.0 110.0)))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "MULTIPOLYGON(((110.0 110.0,160.0 160.0,210.0 110.0,160.0 60.0,110.0 110.0)),((110.0 110.0,60.0 60.0,10.0 110.0,60.0 160.0,110.0 110.0)))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-105 - mAh/mAh-3-1: MultiPolygon touching MultiPolygon" do
     a =
       "MULTIPOLYGON (((110 110, 70 200, 150 200, 110 110),(110 110, 100 180, 120 180, 110 110)),((110 110, 150 20, 70 20, 110 110),(110 110, 120 40, 100 40, 110 110)))"
@@ -1703,6 +3503,26 @@ defmodule Intersect.Validation.PolygonPolygonATest do
 
     b =
       "MULTIPOLYGON (((110 110, 160 160, 210 110, 160 60, 110 110),(110 110, 160 130, 160 90, 110 110)),((110 110, 60 60, 10 110, 60 160, 110 110),(110 110, 60 90, 60 130, 110 110)))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-105 - mAh/mAh-3-1: MultiPolygon touching MultiPolygon (float)" do
+    a =
+      "MULTIPOLYGON(((110.0 110.0,70.0 200.0,150.0 200.0,110.0 110.0),(110.0 110.0,100.0 180.0,120.0 180.0,110.0 110.0)),((110.0 110.0,150.0 20.0,70.0 20.0,110.0 110.0),(110.0 110.0,120.0 40.0,100.0 40.0,110.0 110.0)))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "MULTIPOLYGON(((110.0 110.0,160.0 160.0,210.0 110.0,160.0 60.0,110.0 110.0),(110.0 110.0,160.0 130.0,160.0 90.0,110.0 110.0)),((110.0 110.0,60.0 60.0,10.0 110.0,60.0 160.0,110.0 110.0),(110.0 110.0,60.0 90.0,60.0 130.0,110.0 110.0)))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
@@ -1736,6 +3556,26 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-106 - mAh/mAh-3-2: MultiPolygon touching MultiPolygon (float)" do
+    a =
+      "MULTIPOLYGON(((110.0 110.0,70.0 200.0,200.0 200.0,110.0 110.0),(110.0 110.0,100.0 180.0,120.0 180.0,110.0 110.0)),((110.0 110.0,200.0 20.0,70.0 20.0,110.0 110.0),(110.0 110.0,120.0 40.0,100.0 40.0,110.0 110.0)))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "MULTIPOLYGON(((110.0 110.0,160.0 160.0,210.0 110.0,160.0 60.0,110.0 110.0),(110.0 110.0,160.0 130.0,160.0 90.0,110.0 110.0)),((110.0 110.0,60.0 60.0,10.0 110.0,60.0 160.0,110.0 110.0),(110.0 110.0,60.0 90.0,60.0 130.0,110.0 110.0)))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-107 - mAh/mAh-3-3: MultiPolygon touching MultiPolygon" do
     a =
       "MULTIPOLYGON (((110 110, 20 200, 200 200, 110 110),(110 110, 100 180, 120 180, 110 110)),((110 110, 200 20, 20 20, 110 110),(110 110, 120 40, 100 40, 110 110)))"
@@ -1743,6 +3583,26 @@ defmodule Intersect.Validation.PolygonPolygonATest do
 
     b =
       "MULTIPOLYGON (((110 110, 160 160, 210 110, 160 60, 110 110),(110 110, 160 130, 160 90, 110 110)),((110 110, 60 60, 10 110, 60 160, 110 110),(110 110, 60 90, 60 130, 110 110)))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-107 - mAh/mAh-3-3: MultiPolygon touching MultiPolygon (float)" do
+    a =
+      "MULTIPOLYGON(((110.0 110.0,20.0 200.0,200.0 200.0,110.0 110.0),(110.0 110.0,100.0 180.0,120.0 180.0,110.0 110.0)),((110.0 110.0,200.0 20.0,20.0 20.0,110.0 110.0),(110.0 110.0,120.0 40.0,100.0 40.0,110.0 110.0)))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "MULTIPOLYGON(((110.0 110.0,160.0 160.0,210.0 110.0,160.0 60.0,110.0 110.0),(110.0 110.0,160.0 130.0,160.0 90.0,110.0 110.0)),((110.0 110.0,60.0 60.0,10.0 110.0,60.0 160.0,110.0 110.0),(110.0 110.0,60.0 90.0,60.0 130.0,110.0 110.0)))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
@@ -1776,6 +3636,26 @@ defmodule Intersect.Validation.PolygonPolygonATest do
   end
 
   @tag :validation
+  test "07-108 - mAh/mAh-6-1: MultiPolygon touching MultiPolygon (float)" do
+    a =
+      "MULTIPOLYGON(((110.0 110.0,70.0 200.0,200.0 200.0,110.0 110.0),(110.0 110.0,100.0 180.0,120.0 180.0,110.0 110.0)),((110.0 110.0,200.0 20.0,70.0 20.0,110.0 110.0),(110.0 110.0,120.0 40.0,100.0 40.0,110.0 110.0)))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "MULTIPOLYGON(((110.0 110.0,160.0 160.0,210.0 110.0,160.0 60.0,110.0 110.0),(110.0 110.0,160.0 130.0,160.0 90.0,110.0 110.0)),((110.0 110.0,60.0 60.0,10.0 110.0,60.0 160.0,110.0 110.0),(110.0 110.0,60.0 90.0,60.0 130.0,110.0 110.0)))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "07-109 - mAh/mAh-6-2: MultiPolygon touching MultiPolygon" do
     a =
       "MULTIPOLYGON (((110 110, 70 200, 200 200, 110 110),(110 110, 100 180, 120 180, 110 110)),((110 110, 200 20, 70 20, 110 110),(110 110, 120 40, 100 40, 110 110)))"
@@ -1783,6 +3663,26 @@ defmodule Intersect.Validation.PolygonPolygonATest do
 
     b =
       "MULTIPOLYGON (((110 110, 70 200, 210 110, 70 20, 110 110),(110 110, 110 140, 150 110, 110 80, 110 110)),((110 110, 60 60, 10 110, 60 160, 110 110),(110 110, 60 90, 60 130, 110 110)))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "07-109 - mAh/mAh-6-2: MultiPolygon touching MultiPolygon (float)" do
+    a =
+      "MULTIPOLYGON(((110.0 110.0,70.0 200.0,200.0 200.0,110.0 110.0),(110.0 110.0,100.0 180.0,120.0 180.0,110.0 110.0)),((110.0 110.0,200.0 20.0,70.0 20.0,110.0 110.0),(110.0 110.0,120.0 40.0,100.0 40.0,110.0 110.0)))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "MULTIPOLYGON(((110.0 110.0,70.0 200.0,210.0 110.0,70.0 20.0,110.0 110.0),(110.0 110.0,110.0 140.0,150.0 110.0,110.0 80.0,110.0 110.0)),((110.0 110.0,60.0 60.0,10.0 110.0,60.0 160.0,110.0 110.0),(110.0 110.0,60.0 90.0,60.0 130.0,110.0 110.0)))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true

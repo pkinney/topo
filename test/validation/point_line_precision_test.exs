@@ -15,4 +15,20 @@ defmodule Intersect.Validation.PointLinePrecisionTest do
     assert Topo.equals?(a, b) == false
     assert Topo.equals?(b, a) == false
   end
+
+  @tag :validation
+  @tag :skip
+  test "15-001 - PP - Point just off line. Causes non-robust algorithms to fail. (float)" do
+    a = "LINESTRING(-123456789.0 -40.0,381039468754763.0 123456789.0)" |> Geo.WKT.decode!()
+    b = "POINT(0.0 0.0)" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == false
+    assert Topo.intersects?(b, a) == false
+    assert Topo.disjoint?(a, b) == true
+    assert Topo.disjoint?(b, a) == true
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
 end

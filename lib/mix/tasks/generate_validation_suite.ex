@@ -94,7 +94,15 @@ defmodule Mix.Tasks.Validation.Gen do
         a = "#{test_case["a"]["wkt"]}" |> Geo.WKT.decode!
         b = "#{test_case["b"]["wkt"]}" |> Geo.WKT.decode!
 
-    #{build_assertions(test_case)}
+        #{build_assertions(test_case)}
+      end
+
+      #{tag_str}
+      test "#{test_case["id"]} - #{title} (float)" do
+        a = "#{test_case["a"]["wkt"] |> convert_to_float()}" |> Geo.WKT.decode!
+        b = "#{test_case["b"]["wkt"] |> convert_to_float()}" |> Geo.WKT.decode!
+
+        #{build_assertions(test_case)}
       end
     """
   end
@@ -119,4 +127,13 @@ defmodule Mix.Tasks.Validation.Gen do
         assert Topo.#{relationship}?(b, a) == #{test_case["relationship"][relationship]}
     """
   end
+
+  defp convert_to_float(wkt) when is_binary(wkt) do
+    geometry = Geo.WKT.decode!(wkt)
+    Geo.WKT.encode!(%{geometry | coordinates: convert_to_float(geometry.coordinates)})
+  end
+
+  defp convert_to_float([value]), do: [convert_to_float(value)]
+  defp convert_to_float([value | rest]), do: [convert_to_float(value)] ++ convert_to_float(rest)
+  defp convert_to_float({a, b}), do: {a * 1.0, b * 1.0}
 end

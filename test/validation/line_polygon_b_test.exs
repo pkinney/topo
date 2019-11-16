@@ -17,6 +17,21 @@ defmodule Intersect.Validation.LinePolygonBTest do
   end
 
   @tag :validation
+  test "13-001 - LA - A and B simple (float)" do
+    a = "LINESTRING(240.0 190.0,120.0 120.0)" |> Geo.WKT.decode!()
+    b = "POLYGON((110.0 240.0,50.0 80.0,240.0 70.0,110.0 240.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "13-002 - LA - A intersects B-hole" do
     a = "LINESTRING (0 100, 100 100, 200 200)" |> Geo.WKT.decode!()
 
@@ -35,11 +50,48 @@ defmodule Intersect.Validation.LinePolygonBTest do
   end
 
   @tag :validation
+  test "13-002 - LA - A intersects B-hole (float)" do
+    a = "LINESTRING(0.0 100.0,100.0 100.0,200.0 200.0)" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((30.0 240.0,260.0 30.0,30.0 30.0,30.0 240.0),(80.0 140.0,80.0 80.0,140.0 80.0,80.0 140.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "13-003 - LA - A intersects B-hole #2" do
     a = "LINESTRING (40 340, 200 250, 120 180, 160 110, 270 40)" |> Geo.WKT.decode!()
 
     b =
       "POLYGON ((160 330, 60 260, 20 150, 60 40, 190 20, 270 130, 260 250, 160 330),(140 240, 80 190, 90 100, 160 70, 210 130, 210 210, 140 240))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "13-003 - LA - A intersects B-hole #2 (float)" do
+    a =
+      "LINESTRING(40.0 340.0,200.0 250.0,120.0 180.0,160.0 110.0,270.0 40.0)" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((160.0 330.0,60.0 260.0,20.0 150.0,60.0 40.0,190.0 20.0,270.0 130.0,260.0 250.0,160.0 330.0),(140.0 240.0,80.0 190.0,90.0 100.0,160.0 70.0,210.0 130.0,210.0 210.0,140.0 240.0))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
@@ -73,6 +125,26 @@ defmodule Intersect.Validation.LinePolygonBTest do
   end
 
   @tag :validation
+  test "13-004 - mLmA - A and B complex, disjoint (float)" do
+    a =
+      "MULTIPOLYGON(((60.0 320.0,60.0 80.0,300.0 80.0,60.0 320.0),(80.0 280.0,80.0 100.0,260.0 100.0,80.0 280.0)),((120.0 160.0,140.0 160.0,140.0 140.0,120.0 160.0)))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "MULTILINESTRING((100.0 240.0,100.0 180.0,160.0 180.0,160.0 120.0,220.0 120.0),(40.0 360.0,40.0 60.0,340.0 60.0,40.0 360.0,40.0 20.0),(120.0 120.0,120.0 140.0,100.0 140.0,100.0 120.0,140.0 120.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == false
+    assert Topo.intersects?(b, a) == false
+    assert Topo.disjoint?(a, b) == true
+    assert Topo.disjoint?(b, a) == true
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "13-005 - mLmA - A and B complex, overlapping and touching #1" do
     a =
       "MULTIPOLYGON (((60 260, 60 120, 220 120, 220 260, 60 260),(80 240, 80 140, 200 140, 200 240, 80 240)),((100 220, 100 160, 180 160, 180 220, 100 220),(120 200, 120 180, 160 180, 160 200, 120 200)))"
@@ -80,6 +152,26 @@ defmodule Intersect.Validation.LinePolygonBTest do
 
     b =
       "MULTILINESTRING ((40 260, 240 260, 240 240, 40 240, 40 220, 240 220),(120 300, 120 80, 140 80, 140 300, 140 80, 120 80, 120 320))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "13-005 - mLmA - A and B complex, overlapping and touching #1 (float)" do
+    a =
+      "MULTIPOLYGON(((60.0 260.0,60.0 120.0,220.0 120.0,220.0 260.0,60.0 260.0),(80.0 240.0,80.0 140.0,200.0 140.0,200.0 240.0,80.0 240.0)),((100.0 220.0,100.0 160.0,180.0 160.0,180.0 220.0,100.0 220.0),(120.0 200.0,120.0 180.0,160.0 180.0,160.0 200.0,120.0 200.0)))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "MULTILINESTRING((40.0 260.0,240.0 260.0,240.0 240.0,40.0 240.0,40.0 220.0,240.0 220.0),(120.0 300.0,120.0 80.0,140.0 80.0,140.0 300.0,140.0 80.0,120.0 80.0,120.0 320.0))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
@@ -113,6 +205,26 @@ defmodule Intersect.Validation.LinePolygonBTest do
   end
 
   @tag :validation
+  test "13-006 - mLmA - A and B complex, overlapping and touching #2 (float)" do
+    a =
+      "MULTIPOLYGON(((60.0 320.0,60.0 120.0,280.0 120.0,280.0 320.0,60.0 320.0),(120.0 260.0,120.0 180.0,240.0 180.0,240.0 260.0,120.0 260.0)),((280.0 400.0,320.0 400.0,320.0 360.0,280.0 360.0,280.0 400.0)),((300.0 240.0,300.0 220.0,320.0 220.0,320.0 240.0,300.0 240.0)))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "MULTILINESTRING((80.0 300.0,80.0 160.0,260.0 160.0,260.0 300.0,80.0 300.0,80.0 140.0),(220.0 360.0,220.0 240.0,300.0 240.0,300.0 360.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "13-007 - mLmA - A and B complex, overlapping and touching #3" do
     a =
       "MULTIPOLYGON (((120 180, 60 80, 180 80, 120 180)),((100 240, 140 240, 120 220, 100 240)))"
@@ -120,6 +232,26 @@ defmodule Intersect.Validation.LinePolygonBTest do
 
     b =
       "MULTILINESTRING ((180 260, 120 180, 60 260, 180 260),(60 300, 60 40),(100 100, 140 100))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "13-007 - mLmA - A and B complex, overlapping and touching #3 (float)" do
+    a =
+      "MULTIPOLYGON(((120.0 180.0,60.0 80.0,180.0 80.0,120.0 180.0)),((100.0 240.0,140.0 240.0,120.0 220.0,100.0 240.0)))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "MULTILINESTRING((180.0 260.0,120.0 180.0,60.0 260.0,180.0 260.0),(60.0 300.0,60.0 40.0),(100.0 100.0,140.0 100.0))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true

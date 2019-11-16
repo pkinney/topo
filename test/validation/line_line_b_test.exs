@@ -17,6 +17,21 @@ defmodule Intersect.Validation.LineLineBTest do
   end
 
   @tag :validation
+  test "12-001 - LL - A crosses B (float)" do
+    a = "LINESTRING(0.0 0.0,100.0 100.0)" |> Geo.WKT.decode!()
+    b = "LINESTRING(0.0 100.0,100.0 0.0)" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "12-002 - LL - A shares one segment with B" do
     a = "LINESTRING (0 0, 100 100, 200 0)" |> Geo.WKT.decode!()
     b = "LINESTRING (0 0, 100 100, 200 200)" |> Geo.WKT.decode!()
@@ -32,9 +47,39 @@ defmodule Intersect.Validation.LineLineBTest do
   end
 
   @tag :validation
+  test "12-002 - LL - A shares one segment with B (float)" do
+    a = "LINESTRING(0.0 0.0,100.0 100.0,200.0 0.0)" |> Geo.WKT.decode!()
+    b = "LINESTRING(0.0 0.0,100.0 100.0,200.0 200.0)" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "12-003 - LL - A and B disjoint" do
     a = "LINESTRING (40 360, 40 220, 120 360)" |> Geo.WKT.decode!()
     b = "LINESTRING (120 340, 60 220, 140 220, 140 360)" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == false
+    assert Topo.intersects?(b, a) == false
+    assert Topo.disjoint?(a, b) == true
+    assert Topo.disjoint?(b, a) == true
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "12-003 - LL - A and B disjoint (float)" do
+    a = "LINESTRING(40.0 360.0,40.0 220.0,120.0 360.0)" |> Geo.WKT.decode!()
+    b = "LINESTRING(120.0 340.0,60.0 220.0,140.0 220.0,140.0 360.0)" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == false
     assert Topo.intersects?(b, a) == false
@@ -65,9 +110,44 @@ defmodule Intersect.Validation.LineLineBTest do
   end
 
   @tag :validation
+  test "12-004 - LL - A and B intersect frequently (float)" do
+    a =
+      "LINESTRING(220.0 240.0,200.0 220.0,60.0 320.0,40.0 300.0,180.0 200.0,160.0 180.0,20.0 280.0)"
+      |> Geo.WKT.decode!()
+
+    b =
+      "LINESTRING(220.0 240.0,140.0 160.0,120.0 180.0,220.0 280.0,200.0 300.0,100.0 200.0)"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "12-005 - LL - A and B equal" do
     a = "LINESTRING (80 320, 220 320, 220 160, 80 300)" |> Geo.WKT.decode!()
     b = "LINESTRING (80 320, 220 320, 220 160, 80 300)" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == true
+    assert Topo.equals?(a, b) == true
+    assert Topo.equals?(b, a) == true
+  end
+
+  @tag :validation
+  test "12-005 - LL - A and B equal (float)" do
+    a = "LINESTRING(80.0 320.0,220.0 320.0,220.0 160.0,80.0 300.0)" |> Geo.WKT.decode!()
+    b = "LINESTRING(80.0 320.0,220.0 320.0,220.0 160.0,80.0 300.0)" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -95,9 +175,43 @@ defmodule Intersect.Validation.LineLineBTest do
   end
 
   @tag :validation
+  test "12-006 - LL - A and B touch ends (float)" do
+    a = "LINESTRING(60.0 200.0,60.0 260.0,140.0 200.0)" |> Geo.WKT.decode!()
+    b = "LINESTRING(60.0 200.0,60.0 140.0,140.0 200.0)" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "12-007 - LL - intersecting rings" do
     a = "LINESTRING (180 200, 100 280, 20 200, 100 120, 180 200)" |> Geo.WKT.decode!()
     b = "LINESTRING (100 200, 220 200, 220 80, 100 80, 100 200)" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "12-007 - LL - intersecting rings (float)" do
+    a =
+      "LINESTRING(180.0 200.0,100.0 280.0,20.0 200.0,100.0 120.0,180.0 200.0)"
+      |> Geo.WKT.decode!()
+
+    b =
+      "LINESTRING(100.0 200.0,220.0 200.0,220.0 80.0,100.0 80.0,100.0 200.0)" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true

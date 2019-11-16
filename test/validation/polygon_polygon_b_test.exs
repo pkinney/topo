@@ -17,12 +17,45 @@ defmodule Intersect.Validation.PolygonPolygonBTest do
   end
 
   @tag :validation
+  test "14-001 - AA - simple polygons (float)" do
+    a = "POLYGON((10.0 10.0,100.0 10.0,100.0 100.0,10.0 100.0,10.0 10.0))" |> Geo.WKT.decode!()
+    b = "POLYGON((50.0 50.0,200.0 50.0,200.0 200.0,50.0 200.0,50.0 50.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "14-002 - AA - A with hole intersecting B" do
     a =
       "POLYGON ((20 20, 20 160, 160 160, 160 20, 20 20),(140 140, 40 140, 40 40, 140 40, 140 140))"
       |> Geo.WKT.decode!()
 
     b = "POLYGON ((80 100, 220 100, 220 240, 80 240, 80 100))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "14-002 - AA - A with hole intersecting B (float)" do
+    a =
+      "POLYGON((20.0 20.0,20.0 160.0,160.0 160.0,160.0 20.0,20.0 20.0),(140.0 140.0,40.0 140.0,40.0 40.0,140.0 40.0,140.0 140.0))"
+      |> Geo.WKT.decode!()
+
+    b = "POLYGON((80.0 100.0,220.0 100.0,220.0 240.0,80.0 240.0,80.0 100.0))" |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
     assert Topo.intersects?(b, a) == true
@@ -50,6 +83,23 @@ defmodule Intersect.Validation.PolygonPolygonBTest do
   end
 
   @tag :validation
+  test "14-003 - AA - simple polygons #2 (float)" do
+    a = "POLYGON((20.0 340.0,330.0 380.0,50.0 40.0,20.0 340.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((210.0 320.0,140.0 270.0,0.0 270.0,140.0 220.0,210.0 320.0))" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "14-004 - AA - simple polygons intersecting in P, L and A" do
     a =
       "POLYGON ((0 0, 110 0, 110 60, 40 60, 180 140, 40 220, 110 260, 0 260, 0 0))"
@@ -57,6 +107,26 @@ defmodule Intersect.Validation.PolygonPolygonBTest do
 
     b =
       "POLYGON ((220 0, 110 0, 110 60, 180 60, 40 140, 180 220, 110 260, 220 260, 220 0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "14-004 - AA - simple polygons intersecting in P, L and A (float)" do
+    a =
+      "POLYGON((0.0 0.0,110.0 0.0,110.0 60.0,40.0 60.0,180.0 140.0,40.0 220.0,110.0 260.0,0.0 260.0,0.0 0.0))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((220.0 0.0,110.0 0.0,110.0 60.0,180.0 60.0,40.0 140.0,180.0 220.0,110.0 260.0,220.0 260.0,220.0 0.0))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
@@ -90,11 +160,49 @@ defmodule Intersect.Validation.PolygonPolygonBTest do
   end
 
   @tag :validation
+  test "14-005 - AA - simple polygons with two touching holes in their symDifference (float)" do
+    a =
+      "POLYGON((0.0 0.0,120.0 0.0,120.0 50.0,50.0 50.0,120.0 100.0,50.0 150.0,120.0 150.0,120.0 190.0,0.0 190.0,0.0 0.0))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((230.0 0.0,120.0 0.0,120.0 50.0,190.0 50.0,120.0 100.0,190.0 150.0,120.0 150.0,120.0 190.0,230.0 190.0,230.0 0.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "14-006 - AmA - A simple, symDiff contains inversion" do
     a = "POLYGON ((0 0, 210 0, 210 230, 0 230, 0 0))" |> Geo.WKT.decode!()
 
     b =
       "MULTIPOLYGON (((40 20, 0 0, 20 40, 60 60, 40 20)),((60 90, 60 60, 90 60, 90 90, 60 90)),((70 120, 90 90, 100 120, 70 120)),((120 70, 90 90, 120 100, 120 70)))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "14-006 - AmA - A simple, symDiff contains inversion (float)" do
+    a = "POLYGON((0.0 0.0,210.0 0.0,210.0 230.0,0.0 230.0,0.0 0.0))" |> Geo.WKT.decode!()
+
+    b =
+      "MULTIPOLYGON(((40.0 20.0,0.0 0.0,20.0 40.0,60.0 60.0,40.0 20.0)),((60.0 90.0,60.0 60.0,90.0 60.0,90.0 90.0,60.0 90.0)),((70.0 120.0,90.0 90.0,100.0 120.0,70.0 120.0)),((120.0 70.0,90.0 90.0,120.0 100.0,120.0 70.0)))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
@@ -126,11 +234,47 @@ defmodule Intersect.Validation.PolygonPolygonBTest do
   end
 
   @tag :validation
+  test "14-007 - AmA - A simple, B connected multiPolygon touching A at vertex (float)" do
+    a = "POLYGON((0.0 0.0,340.0 0.0,340.0 300.0,0.0 300.0,0.0 0.0))" |> Geo.WKT.decode!()
+
+    b =
+      "MULTIPOLYGON(((40.0 20.0,0.0 0.0,20.0 40.0,60.0 60.0,40.0 20.0)),((60.0 100.0,60.0 60.0,100.0 60.0,100.0 100.0,60.0 100.0)))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "14-008 - AmA - A simple, B connected multiPolygon touching A at interior of edge" do
     a = "POLYGON ((0 0, 120 0, 120 120, 0 120, 0 0))" |> Geo.WKT.decode!()
 
     b =
       "MULTIPOLYGON (((60 20, 0 20, 60 60, 60 20)),((60 100, 60 60, 100 60, 100 100, 60 100)))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == true
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "14-008 - AmA - A simple, B connected multiPolygon touching A at interior of edge (float)" do
+    a = "POLYGON((0.0 0.0,120.0 0.0,120.0 120.0,0.0 120.0,0.0 0.0))" |> Geo.WKT.decode!()
+
+    b =
+      "MULTIPOLYGON(((60.0 20.0,0.0 20.0,60.0 60.0,60.0 20.0)),((60.0 100.0,60.0 60.0,100.0 60.0,100.0 100.0,60.0 100.0)))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
@@ -164,6 +308,26 @@ defmodule Intersect.Validation.PolygonPolygonBTest do
   end
 
   @tag :validation
+  test "14-009 - AA - simple polygons with holes (float)" do
+    a =
+      "POLYGON((160.0 330.0,60.0 260.0,20.0 150.0,60.0 40.0,190.0 20.0,270.0 130.0,260.0 250.0,160.0 330.0),(140.0 240.0,80.0 190.0,90.0 100.0,160.0 70.0,210.0 130.0,210.0 210.0,140.0 240.0))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((300.0 330.0,190.0 270.0,150.0 170.0,150.0 110.0,250.0 30.0,380.0 50.0,380.0 250.0,300.0 330.0),(290.0 240.0,240.0 200.0,240.0 110.0,290.0 80.0,330.0 170.0,290.0 240.0))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "14-010 - mAmA - complex polygons touching and overlapping" do
     a =
       "MULTIPOLYGON (((120 340, 120 200, 140 200, 140 280, 160 280, 160 200, 180 200, 180 280, 200 280, 200 200, 220 200, 220 340, 120 340)),((360 200, 220 200, 220 180, 300 180, 300 160, 220 160, 220 140, 300 140, 300 120, 220 120, 220 100, 360 100, 360 200)))"
@@ -171,6 +335,26 @@ defmodule Intersect.Validation.PolygonPolygonBTest do
 
     b =
       "MULTIPOLYGON (((100 220, 100 200, 300 200, 300 220, 100 220)),((280 180, 280 160, 300 160, 300 180, 280 180)),((220 140, 220 120, 240 120, 240 140, 220 140)),((180 220, 160 240, 200 240, 180 220)))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "14-010 - mAmA - complex polygons touching and overlapping (float)" do
+    a =
+      "MULTIPOLYGON(((120.0 340.0,120.0 200.0,140.0 200.0,140.0 280.0,160.0 280.0,160.0 200.0,180.0 200.0,180.0 280.0,200.0 280.0,200.0 200.0,220.0 200.0,220.0 340.0,120.0 340.0)),((360.0 200.0,220.0 200.0,220.0 180.0,300.0 180.0,300.0 160.0,220.0 160.0,220.0 140.0,300.0 140.0,300.0 120.0,220.0 120.0,220.0 100.0,360.0 100.0,360.0 200.0)))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "MULTIPOLYGON(((100.0 220.0,100.0 200.0,300.0 200.0,300.0 220.0,100.0 220.0)),((280.0 180.0,280.0 160.0,300.0 160.0,300.0 180.0,280.0 180.0)),((220.0 140.0,220.0 120.0,240.0 120.0,240.0 140.0,220.0 140.0)),((180.0 220.0,160.0 240.0,200.0 240.0,180.0 220.0)))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
@@ -204,11 +388,49 @@ defmodule Intersect.Validation.PolygonPolygonBTest do
   end
 
   @tag :validation
+  test "14-011 - mAmA - complex polygons touching (float)" do
+    a =
+      "MULTIPOLYGON(((100.0 200.0,100.0 180.0,120.0 180.0,120.0 200.0,100.0 200.0)),((60.0 240.0,60.0 140.0,220.0 140.0,220.0 160.0,160.0 160.0,160.0 180.0,200.0 180.0,200.0 200.0,160.0 200.0,160.0 220.0,220.0 220.0,220.0 240.0,60.0 240.0),(80.0 220.0,80.0 160.0,140.0 160.0,140.0 220.0,80.0 220.0)),((280.0 220.0,240.0 180.0,260.0 160.0,300.0 200.0,280.0 220.0)))"
+      |> Geo.WKT.decode!()
+
+    b =
+      "MULTIPOLYGON(((80.0 220.0,80.0 160.0,140.0 160.0,140.0 220.0,80.0 220.0),(100.0 200.0,100.0 180.0,120.0 180.0,120.0 200.0,100.0 200.0)),((220.0 240.0,220.0 220.0,160.0 220.0,160.0 200.0,220.0 200.0,220.0 180.0,160.0 180.0,160.0 160.0,220.0 160.0,220.0 140.0,320.0 140.0,320.0 240.0,220.0 240.0),(240.0 220.0,240.0 160.0,300.0 160.0,300.0 220.0,240.0 220.0)))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
   test "14-012 - AA - hole intersecting boundary to produce line" do
     a = "POLYGON ((60 160, 140 160, 140 60, 60 60, 60 160))" |> Geo.WKT.decode!()
 
     b =
       "POLYGON ((160 160, 100 160, 100 100, 160 100, 160 160),(140 140, 120 140, 120 120, 140 120, 140 140))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
+
+  @tag :validation
+  test "14-012 - AA - hole intersecting boundary to produce line (float)" do
+    a = "POLYGON((60.0 160.0,140.0 160.0,140.0 60.0,60.0 60.0,60.0 160.0))" |> Geo.WKT.decode!()
+
+    b =
+      "POLYGON((160.0 160.0,100.0 160.0,100.0 100.0,160.0 100.0,160.0 160.0),(140.0 140.0,120.0 140.0,120.0 120.0,140.0 120.0,140.0 140.0))"
       |> Geo.WKT.decode!()
 
     assert Topo.intersects?(a, b) == true
