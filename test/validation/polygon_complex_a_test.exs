@@ -18,4 +18,22 @@ defmodule Intersect.Validation.PolygonComplexATest do
     assert Topo.equals?(a, b) == false
     assert Topo.equals?(b, a) == false
   end
+
+  @tag :validation
+  test "08-001 - AC A-shells overlapping B-shell at A-vertex (float)" do
+    a = "POLYGON((100.0 60.0,140.0 100.0,100.0 140.0,60.0 100.0,100.0 60.0))" |> Geo.WKT.decode!()
+
+    b =
+      "MULTIPOLYGON(((80.0 40.0,120.0 40.0,120.0 80.0,80.0 80.0,80.0 40.0)),((120.0 80.0,160.0 80.0,160.0 120.0,120.0 120.0,120.0 80.0)),((80.0 120.0,120.0 120.0,120.0 160.0,80.0 160.0,80.0 120.0)),((40.0 80.0,80.0 80.0,80.0 120.0,40.0 120.0,40.0 80.0)))"
+      |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b) == true
+    assert Topo.intersects?(b, a) == true
+    assert Topo.disjoint?(a, b) == false
+    assert Topo.disjoint?(b, a) == false
+    assert Topo.contains?(a, b) == false
+    assert Topo.within?(a, b) == false
+    assert Topo.equals?(a, b) == false
+    assert Topo.equals?(b, a) == false
+  end
 end
