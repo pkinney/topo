@@ -44,8 +44,7 @@ geometries are of the same type.  A Point **A** is equal to a MultiPoint that
 contains only the same Point **A**.
 
 Each of these functions can be passed any two Geometries in either a Map with a
-`:type` and `:coordinates` keys or as a struct generated via the Geo library
-(https://github.com/bryanjos/geo). Coordinates are represented as atoms `{x, y}`
+`:type` and `:coordinates` keys or as a struct generated via the [Geo library](https://github.com/bryanjos/geo). Coordinates are represented as atoms `{x, y}`
 and multiple coordinates as Lists.
 
 ```elixir
