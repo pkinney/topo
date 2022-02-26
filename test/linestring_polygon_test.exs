@@ -106,4 +106,40 @@ defmodule LineStringPolygonTest do
     assert Topo.intersects?(b, a)
     refute Topo.contains?(a, b)
   end
+
+  test "line with endpoints in polygon but traversing outside of polygon" do
+    a =
+      "POLYGON((-5.101858494086758 -11.626978433639922,-6.083357021603929 1.3948583572266788,2.7612355354927542 1.618714536326428,11.47787952519244 7.668167122436479,1.0000000000000002 18.5,-1.5 16.0,6.52212047480756 8.33183287756352,1.2387644645072458 6.3812854636735725,-9.916642978396071 4.6051416427733205,-8.626978433639922 -11.898141505913241,-5.101858494086758 -11.626978433639922))"
+      |> Geo.WKT.decode!()
+
+    b = "LINESTRING(-2.7 2.2,-6.5 -3.1)" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b)
+    assert Topo.intersects?(b, a)
+    refute Topo.contains?(a, b)
+  end
+
+  test "line with endpoints in polygon but traversing outside of polygon not at a midpoint" do
+    a =
+      "POLYGON((-5.101858494086758 -11.626978433639922,-6.083357021603929 1.3948583572266788,2.7612355354927542 1.618714536326428,11.47787952519244 7.668167122436479,1.0000000000000002 18.5,-1.5 16.0,6.52212047480756 8.33183287756352,1.2387644645072458 6.3812854636735725,-9.916642978396071 4.6051416427733205,-8.626978433639922 -11.898141505913241,-5.101858494086758 -11.626978433639922))"
+      |> Geo.WKT.decode!()
+
+    b = "LINESTRING(-6.5 0.3, 9 8.5)" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b)
+    assert Topo.intersects?(b, a)
+    refute Topo.contains?(a, b)
+  end
+
+  test "line with endpoints in polygon but one leg traversing outside of polygon" do
+    a =
+      "POLYGON((-5.101858494086758 -11.626978433639922,-6.083357021603929 1.3948583572266788,2.7612355354927542 1.618714536326428,11.47787952519244 7.668167122436479,1.0000000000000002 18.5,-1.5 16.0,6.52212047480756 8.33183287756352,1.2387644645072458 6.3812854636735725,-9.916642978396071 4.6051416427733205,-8.626978433639922 -11.898141505913241,-5.101858494086758 -11.626978433639922))"
+      |> Geo.WKT.decode!()
+
+    b = "LINESTRING(-6.5 0.3, 9 8.5, 7 9.5)" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b)
+    assert Topo.intersects?(b, a)
+    refute Topo.contains?(a, b)
+  end
 end
