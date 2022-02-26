@@ -12,7 +12,8 @@ defmodule Topo.Mixfile do
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
       dialyzer: [plt_add_apps: [:poison, :mix]],
-      deps: deps()
+      deps: deps(),
+      aliases: aliases()
     ]
   end
 
@@ -31,6 +32,7 @@ defmodule Topo.Mixfile do
       {:envelope, "~> 1.0", only: :dev},
       {:earmark, "~> 1.2", only: :dev},
       {:ex_doc, "~> 0.19", only: :dev},
+      {:credo, "~> 0.9", only: [:dev], runtime: false},
       {:dialyxir, "~> 0.5", only: [:dev], runtime: false}
     ]
   end
@@ -47,6 +49,18 @@ defmodule Topo.Mixfile do
       maintainers: ["Powell Kinney"],
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/pkinney/topo"}
+    ]
+  end
+
+  defp aliases do
+    [
+      validate: [
+        "clean",
+        "compile --warnings-as-error",
+        "format --check-formatted",
+        "credo",
+        "dialyzer"
+      ]
     ]
   end
 end

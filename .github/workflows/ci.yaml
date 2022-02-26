@@ -1,0 +1,61 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  format:
+    name: Validation of source code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.1
+
+      - name: Install OTP and Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: 24.0.4
+          elixir-version: 1.12.2
+
+      - name: Install dependencies
+        run: mix deps.get
+
+      - name: Run "mix format"
+        run: mix validate
+
+  test:
+    name: Test (Elixir ${{matrix.elixir}} | Erlang/OTP ${{matrix.otp}})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - otp: 24.0
+            elixir: 1.12.2
+          - otp: 23.3
+            elixir: 1.12.2
+          - otp: 23.3
+            elixir: 1.11.4
+          - otp: 22.3
+            elixir: 1.10.4
+          - otp: 22.3
+            elixir: 1.9.4
+          - otp: 22.3
+            elixir: 1.8.2
+          - otp: 22.3
+            elixir: 1.7.4
+    env:
+      MIX_ENV: test
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Install OTP and Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: ${{matrix.otp}}
+          elixir-version: ${{matrix.elixir}}
+
+      - name: Install dependencies
+        run: mix deps.get --only test
+
+      - name: Run tests
+        run: mix test --trace
