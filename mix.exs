@@ -32,7 +32,7 @@ defmodule Topo.Mixfile do
       {:envelope, "~> 1.0", only: :dev},
       {:earmark, "~> 1.2", only: :dev},
       {:ex_doc, "~> 0.19", only: :dev},
-      {:credo, "~> 0.9", only: [:dev], runtime: false},
+      {:credo, "~> 1.6", only: [:dev], runtime: false},
       {:dialyxir, "~> 0.5", only: [:dev], runtime: false}
     ]
   end
