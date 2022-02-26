@@ -32,7 +32,7 @@ defmodule Topo.LineRing do
   defp any_ring_segment?([_], _, _, _), do: false
 
   defp any_ring_segment?([a1, a2 | rest], b1, b2, relation) do
-    SegSeg.intersection(a1, a2, b1, b2) |> elem(1) == relation ||
+    SegSeg.intersection(a1, a2, b1, b2, strict: false) |> elem(1) == relation ||
       any_ring_segment?([a2 | rest], b1, b2, relation)
   end
 

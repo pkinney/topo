@@ -44,14 +44,14 @@ defmodule Topo.Util do
   @spec any_edge_pair_not?(list, list, atom) :: boolean
   def any_edge_pair_not?(a, b, rel) do
     do_any_edge_pair?(a, b, fn a1, a2, b1, b2 ->
-      elem(SegSeg.intersection(a1, a2, b1, b2), 1) != rel
+      elem(SegSeg.intersection(a1, a2, b1, b2, strict: false), 1) != rel
     end)
   end
 
   @spec any_edge_pair?(list, list, atom) :: boolean
   def any_edge_pair?(a, b, rel) do
     do_any_edge_pair?(a, b, fn a1, a2, b1, b2 ->
-      elem(SegSeg.intersection(a1, a2, b1, b2), 1) == rel
+      elem(SegSeg.intersection(a1, a2, b1, b2, strict: false), 1) == rel
     end)
   end
 

@@ -142,4 +142,13 @@ defmodule LineStringPolygonTest do
     assert Topo.intersects?(b, a)
     refute Topo.contains?(a, b)
   end
+
+  test "line that touches a corner but stays internal to a polygon" do
+    a = "POLYGON((0 0,10 0,10 3,4 3,4 7,10 7,10 10,0 10,0 0))" |> Geo.WKT.decode!()
+    b = "LINESTRING(6.05 9.05,3.95 6.95,1.05 1.05)" |> Geo.WKT.decode!()
+
+    assert Topo.intersects?(a, b)
+    assert Topo.intersects?(b, a)
+    assert Topo.contains?(a, b)
+  end
 end
