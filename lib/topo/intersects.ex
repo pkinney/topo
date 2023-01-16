@@ -16,7 +16,8 @@ defmodule Topo.Intersects do
           | %Geo.MultiPolygon{}
 
   @spec intersects?(geo_struct, geo_struct) :: boolean
-  def intersects?(%Geo.Point{} = a, %Geo.Point{} = b), do: a == b
+  def intersects?(%Geo.Point{coordinates: c}, %Geo.Point{coordinates: c}), do: true
+  def intersects?(%Geo.Point{}, %Geo.Point{}), do: false
   def intersects?(%Geo.Point{} = a, %Geo.MultiPoint{} = b), do: intersects_any?(a, b, Geo.Point)
 
   def intersects?(%Geo.Point{coordinates: a}, %Geo.LineString{coordinates: b}),

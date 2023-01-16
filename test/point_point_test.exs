@@ -7,6 +7,10 @@ defmodule PointPointTest do
     assert Topo.intersects?(@point, @point)
   end
 
+  test "point should intersect in coordinates only" do
+    assert Topo.intersects?(@point, %{@point | properties: %{foo: :bar}})
+  end
+
   test "point should not be disjoint from itself" do
     refute Topo.disjoint?(@point, @point)
   end
