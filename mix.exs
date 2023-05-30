@@ -24,8 +24,7 @@ defmodule Topo.Mixfile do
   defp deps do
     [
       {:geo, "~> 3.1"},
-      # {:seg_seg, "~> 0.1"},
-      {:seg_seg, git: "https://github.com/pkinney/segseg_ex.git", tag: "1.0.0-rc.1"},
+      {:seg_seg, "~> 1.0"},
       {:vector, "~> 1.0"},
       {:poison, "~> 3.0", only: [:test, :dev]},
       {:benchfella, "~> 0.3.0", only: :dev},
