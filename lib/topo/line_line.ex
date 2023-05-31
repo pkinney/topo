@@ -133,7 +133,7 @@ defmodule Topo.LineLine do
   defp do_linestring_intersects_segment([_], _), do: :disjoint
 
   defp do_linestring_intersects_segment([a, b | rest], {p1, p2}) do
-    case SegSeg.intersection(a, b, p1, p2, strict: false) do
+    case SegSeg.intersection(a, b, p1, p2, epsilon: Util.epsilon()) do
       {_, :disjoint, _} ->
         do_linestring_intersects_segment([b | rest], {p1, p2})
 
