@@ -4,8 +4,8 @@ defmodule Topo.Mixfile do
   def project do
     [
       app: :topo,
-      version: "0.6.0",
-      elixir: "~> 1.6",
+      version: "1.0.0",
+      elixir: "~> 1.12",
       description: description(),
       package: package(),
       build_embedded: Mix.env() == :prod,
@@ -26,14 +26,14 @@ defmodule Topo.Mixfile do
       {:geo, "~> 3.1"},
       {:seg_seg, "~> 1.0"},
       {:vector, "~> 1.0"},
-      {:poison, "~> 3.0", only: [:test, :dev]},
+      {:poison, "~> 5.0", only: [:test, :dev]},
       {:benchfella, "~> 0.3.0", only: :dev},
       {:excoveralls, "~> 0.8", only: :test},
       {:envelope, "~> 1.0", only: :dev},
       {:earmark, "~> 1.2", only: :dev},
       {:ex_doc, "~> 0.19", only: :dev},
       {:credo, "~> 1.6", only: [:dev], runtime: false},
-      {:dialyxir, "~> 0.5", only: [:dev], runtime: false}
+      {:dialyxir, "~> 1.3", only: [:dev], runtime: false}
     ]
   end
 

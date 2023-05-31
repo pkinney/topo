@@ -17,7 +17,7 @@ geometries. Geometries can be of any of the following types:
 
 ```elixir
 defp deps do
-  [{:topo, "~> 0.5"}]
+  [{:topo, "~> 1.0"}]
 end
 ```
 
