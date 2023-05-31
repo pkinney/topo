@@ -100,8 +100,22 @@ Topo.intersects? a, {1, 3} # => true
 Topo.contains? b, {1, 3} # => true
 ```
 
+## Float Precision Issues
+
+It is possible that floating point math imprecision can cause incorrect results for certain inputs. This is often encountered during the line segment comparison (see [LineStringPolygonTest](https://github.com/pkinney/topo/blob/master/test/linestring_polygon_test.exs) for an example).  By default, `Topo` is strict on intersection math; however, if you with to allow a less strict requirement for line segment intersection, you can set an `:epsilon` value at compile time, which will be passed to the [SegSeg](https://github.com/pkinney/segseg_ex) library (see [here](https://github.com/pkinney/segseg_ex#float-precision-issues) for a more detailed explanation).
+
+In your application's config file add
+
+```elixir
+config :topo, epsilon: true
+```
+
+Topo uses the `Application.config_env/3` function to avoid querying the value on each computation, so you may have to clean and recompile the dependencies of your application after changing.  The default value is `false` will will apply strict comparison to the resulting floating point numbers used in calculating line segment relationships.
+
+
 ## Tests
 
 ```bash
 > mix test
 ```
+

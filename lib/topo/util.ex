@@ -1,6 +1,8 @@
 defmodule Topo.Util do
   @moduledoc false
 
+  @epsilon Application.compile_env(:topo, :epsilon, false)
+
   @type point :: {number, number}
 
   @spec cross(point, point, point) :: number
@@ -44,14 +46,20 @@ defmodule Topo.Util do
   @spec any_edge_pair_not?(list, list, atom) :: boolean
   def any_edge_pair_not?(a, b, rel) do
     do_any_edge_pair?(a, b, fn a1, a2, b1, b2 ->
-      elem(SegSeg.intersection(a1, a2, b1, b2), 1) != rel
+      elem(
+        SegSeg.intersection(a1, a2, b1, b2, epsilon: epsilon()),
+        1
+      ) != rel
     end)
   end
 
   @spec any_edge_pair?(list, list, atom) :: boolean
   def any_edge_pair?(a, b, rel) do
     do_any_edge_pair?(a, b, fn a1, a2, b1, b2 ->
-      elem(SegSeg.intersection(a1, a2, b1, b2), 1) == rel
+      elem(
+        SegSeg.intersection(a1, a2, b1, b2, epsilon: epsilon()),
+        1
+      ) == rel
     end)
   end
 
@@ -68,4 +76,7 @@ defmodule Topo.Util do
   defp any_edge?([a1, a2 | rest], [b1, b2], fun) do
     fun.(a1, a2, b1, b2) || any_edge?([a2 | rest], [b1, b2], fun)
   end
+
+  @spec epsilon() :: term()
+  def epsilon(), do: @epsilon
 end
