@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.29.4">
+    <meta name="project" content="topo v1.0.0">
+
+    <title>Topo — topo v1.0.0</title>
+    <link rel="stylesheet" href="dist/html-elixir-HHVY3JYD.css" />
+
+
+    <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
+    <script src="dist/handlebars.templates-XWGFFSCD.js"></script>
+    <script src="dist/sidebar_items-2D6C3DE1.js"></script>
+
+      <script src="docs_config.js"></script>
+
+    <script async src="dist/html-JDI3AVDD.js"></script>
+
+
+  </head>
+  <body data-type="modules" class="page-module">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="main">
+
+<button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<section class="sidebar">
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button" aria-label="Submit Search">
+      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
+    </button>
+    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
+      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
+    </button>
+    <label class="search-label">
+      <p class="sr-only">Search</p>
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+    </label>
+  </form>
+
+  <div class="autocomplete">
+    <div class="autocomplete-results">
+    </div>
+  </div>
+
+  <div class="sidebar-header">
+
+    <div class="sidebar-projectDetails">
+      <a href="api-reference.html" class="sidebar-projectName" translate="no">
+topo
+      </a>
+      <div class="sidebar-projectVersion" translate="no">
+        v1.0.0
+      </div>
+    </div>
+    <ul class="sidebar-listNav">
+      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+
+        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+
+
+    </ul>
+  </div>
+
+  <div class="gradient"></div>
+  <ul id="full-list"></ul>
+</section>
+
+<section class="content">
+  <output role="status" id="toast"></output>
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+<h1>
+<button class="icon-action display-settings">
+  <i class="ri-settings-3-line"></i>
+  <span class="sr-only">Settings</span>
+</button>
+
+
+  <span translate="no">Topo</span> 
+  <small class="app-vsn" translate="no">(topo v1.0.0)</small>
+
+</h1>
+
+
+  <section id="moduledoc">
+<p>A Geometry library for Elixir that calculates relationships between two
+geometries.  Geometries can be of any of the following types:</p><ul><li>Point</li><li>LineString</li><li>Polygon</li><li>MultiPoint</li><li>MultiLineString</li><li>MultiPolygon</li></ul><p>Each of these functions can be passed any two Geometries in either a Map with a
+<code class="inline">:type</code> and <code class="inline">:coordinates</code> keys or as a struct generated via the Geo library
+(<a href="https://github.com/bryanjos/geo">https://github.com/bryanjos/geo</a>). Coordinates are represented as atoms <code class="inline">{x, y}</code>
+and multiple coordinates as Lists.</p><pre><code class="makeup elixir" translate="no"><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7816164884-1">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Polygon&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7816164884-2">[</span><span class="p" data-group-id="7816164884-3">[</span><span class="p" data-group-id="7816164884-4">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7816164884-4">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7816164884-5">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7816164884-5">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7816164884-6">{</span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p" data-group-id="7816164884-6">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7816164884-7">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7816164884-7">}</span><span class="p" data-group-id="7816164884-3">]</span><span class="p" data-group-id="7816164884-2">]</span><span class="p" data-group-id="7816164884-1">}</span><span class="w">
+</span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7816164884-8">%</span><span class="nc" data-group-id="7816164884-8">Geo.Polygon</span><span class="p" data-group-id="7816164884-8">{</span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7816164884-9">[</span><span class="p" data-group-id="7816164884-10">[</span><span class="p" data-group-id="7816164884-11">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7816164884-11">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7816164884-12">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7816164884-12">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7816164884-13">{</span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p" data-group-id="7816164884-13">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7816164884-14">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7816164884-14">}</span><span class="p" data-group-id="7816164884-10">]</span><span class="p" data-group-id="7816164884-9">]</span><span class="p" data-group-id="7816164884-8">}</span><span class="w">
+
+</span><span class="nc">Topo</span><span class="o">.</span><span class="n">equals?</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="c1"># =&gt; true</span></code></pre><p>Instead of a Point geometry, just a single coordinate can be used.</p><pre><code class="makeup elixir" translate="no"><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="7368574583-1">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Polygon&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7368574583-2">[</span><span class="p" data-group-id="7368574583-3">[</span><span class="p" data-group-id="7368574583-4">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7368574583-4">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7368574583-5">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7368574583-5">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7368574583-6">{</span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p" data-group-id="7368574583-6">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7368574583-7">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="7368574583-7">}</span><span class="p" data-group-id="7368574583-3">]</span><span class="p" data-group-id="7368574583-2">]</span><span class="p" data-group-id="7368574583-1">}</span><span class="w">
+
+</span><span class="nc">Topo</span><span class="o">.</span><span class="n">intersects?</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7368574583-8">{</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p" data-group-id="7368574583-8">}</span><span class="w"> </span><span class="c1"># =&gt; true</span></code></pre><p>The <a href="Topo.html#content"><code class="inline">Topo</code></a> library's functions will automatically attempt to &quot;clean&quot; geometries
+passed to them:</p><ul><li>Linear Rings (including Polygons) will be reordered to a counter-clockwise
+direction.</li><li>Polygon's Linear Rings will automatically be closed if the first point is not
+repeated as the last point.</li><li>Points that are equal or collinear with surrounding points are removed from
+LineStrings or Polygons.</li></ul>
+  </section>
+
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+      Summary
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:geometry/0" translate="no">geometry()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#contains?/2" translate="no">contains?(a, b)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns <code class="inline">true</code> if all points of geometry <strong>B</strong> lie within <strong>A</strong>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#disjoint?/2" translate="no">disjoint?(a, b)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns <code class="inline">true</code> if geometries <strong>A</strong> and <strong>B</strong> do not have any points in
+common.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#equals?/2" translate="no">equals?(a, b)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Geometries <strong>A</strong> and <strong>B</strong> are equivalent and cover the exact
+same set of points.  By definition, <strong>A</strong> and <strong>B</strong> are equal if <strong>A</strong> contains
+<strong>B</strong> and <strong>B</strong> contains <strong>A</strong>.  Equality does not necessarily mean that the
+geometries are of the same type.  A Point <strong>A</strong> is equal to a MultiPoint that
+contains only the same Point <strong>A</strong>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#intersects?/2" translate="no">intersects?(a, b)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns <code class="inline">true</code> if geometries <strong>A</strong> and <strong>B</strong> share at least one point in
+common.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#within?/2" translate="no">within?(a, b)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>This is the direct converse of <code class="inline">contains?</code>.  All points of
+geometry <strong>A</strong> lie within geometry <strong>B</strong>.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+Types
+    </h1>
+    <div class="types-list">
+<section class="detail" id="t:geometry/0">
+
+  <div class="detail-header">
+    <a href="#t:geometry/0" class="detail-link" title="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature" translate="no">geometry()</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> geometry() ::
+  {<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">number</a>()}
+  | %{type: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), coordinates: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>()}
+  | %Geo.Point{coordinates: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(), properties: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(), srid: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()}
+  | %Geo.MultiPoint{coordinates: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(), properties: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(), srid: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()}
+  | %Geo.LineString{coordinates: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(), properties: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(), srid: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()}
+  | %Geo.MultiLineString{coordinates: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(), properties: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(), srid: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()}
+  | %Geo.Polygon{coordinates: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(), properties: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(), srid: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()}
+  | %Geo.MultiPolygon{coordinates: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(), properties: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(), srid: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+Functions
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="contains?/2">
+
+  <div class="detail-header">
+    <a href="#contains?/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">contains?(a, b)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> contains?(<a href="#t:geometry/0">geometry</a>(), <a href="#t:geometry/0">geometry</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Returns <code class="inline">true</code> if all points of geometry <strong>B</strong> lie within <strong>A</strong>.</p><p>There are a few non-obvious special cases that are worth mentioning:</p><ul><li>A Polygon does not contain its own boundary.  Specifically a LineString that
+is the exact same as a Polygon's exterior Linear ring is not contained within a
+that Polygon.</li></ul><pre><code class="makeup elixir" translate="no"><span class="w">  </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="8555515564-1">%</span><span class="nc" data-group-id="8555515564-1">Geo.Polygon</span><span class="p" data-group-id="8555515564-1">{</span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8555515564-2">[</span><span class="p" data-group-id="8555515564-3">[</span><span class="p" data-group-id="8555515564-4">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="8555515564-4">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8555515564-5">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="8555515564-5">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8555515564-6">{</span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p" data-group-id="8555515564-6">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8555515564-7">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="8555515564-7">}</span><span class="p" data-group-id="8555515564-3">]</span><span class="p" data-group-id="8555515564-2">]</span><span class="p" data-group-id="8555515564-1">}</span><span class="w">
+  </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="8555515564-8">%</span><span class="nc" data-group-id="8555515564-8">Geo.LineString</span><span class="p" data-group-id="8555515564-8">{</span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="8555515564-9">[</span><span class="p" data-group-id="8555515564-10">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="8555515564-10">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8555515564-11">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="8555515564-11">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8555515564-12">{</span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p" data-group-id="8555515564-12">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8555515564-13">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="8555515564-13">}</span><span class="p" data-group-id="8555515564-9">]</span><span class="p" data-group-id="8555515564-8">}</span><span class="w">
+
+  </span><span class="nc">Topo</span><span class="o">.</span><span class="n">contains?</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="c1"># =&gt; false</span><span class="w">
+  </span><span class="nc">Topo</span><span class="o">.</span><span class="n">intersects?</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w">  </span><span class="c1"># =&gt; true</span></code></pre><ul><li>A LineString does not contain it's own first and last point (unless those
+points are the same, as in a LinearRing)</li></ul><pre><code class="makeup elixir" translate="no"><span class="w">  </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3063482485-1">%</span><span class="nc" data-group-id="3063482485-1">Geo.LineString</span><span class="p" data-group-id="3063482485-1">{</span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3063482485-2">[</span><span class="p" data-group-id="3063482485-3">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="3063482485-3">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3063482485-4">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="3063482485-4">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3063482485-5">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="3063482485-5">}</span><span class="p" data-group-id="3063482485-2">]</span><span class="p" data-group-id="3063482485-1">}</span><span class="w">
+  </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="3063482485-6">%</span><span class="nc" data-group-id="3063482485-6">Geo.LineString</span><span class="p" data-group-id="3063482485-6">{</span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3063482485-7">[</span><span class="p" data-group-id="3063482485-8">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="3063482485-8">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3063482485-9">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="3063482485-9">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3063482485-10">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p" data-group-id="3063482485-10">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3063482485-11">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="3063482485-11">}</span><span class="p" data-group-id="3063482485-7">]</span><span class="p" data-group-id="3063482485-6">}</span><span class="w">
+
+  </span><span class="nc">Topo</span><span class="o">.</span><span class="n">contains?</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3063482485-12">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="3063482485-12">}</span><span class="w"> </span><span class="c1"># =&gt; false</span><span class="w">
+  </span><span class="nc">Topo</span><span class="o">.</span><span class="n">intersects?</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3063482485-13">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="3063482485-13">}</span><span class="w"> </span><span class="c1"># =&gt; true</span><span class="w">
+  </span><span class="nc">Topo</span><span class="o">.</span><span class="n">contains?</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3063482485-14">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="3063482485-14">}</span><span class="w"> </span><span class="c1"># =&gt; true</span></code></pre><h2 id="contains?/2-examples" class="section-heading">
+  <a href="#contains?/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Topo</span><span class="o">.</span><span class="n">contains?</span><span class="p" data-group-id="7903836817-1">(</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="7903836817-2">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Polygon&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7903836817-3">[</span><span class="p" data-group-id="7903836817-4">[</span><span class="p" data-group-id="7903836817-5">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="7903836817-5">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7903836817-6">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">180</span><span class="p" data-group-id="7903836817-6">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7903836817-7">{</span><span class="mi">220</span><span class="p">,</span><span class="w"> </span><span class="mi">180</span><span class="p" data-group-id="7903836817-7">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7903836817-8">{</span><span class="mi">220</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="7903836817-8">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7903836817-9">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="7903836817-9">}</span><span class="p" data-group-id="7903836817-4">]</span><span class="p" data-group-id="7903836817-3">]</span><span class="p" data-group-id="7903836817-2">}</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="7903836817-10">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Polygon&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7903836817-11">[</span><span class="p" data-group-id="7903836817-12">[</span><span class="p" data-group-id="7903836817-13">{</span><span class="mi">160</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p" data-group-id="7903836817-13">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7903836817-14">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="7903836817-14">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7903836817-15">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">140</span><span class="p" data-group-id="7903836817-15">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7903836817-16">{</span><span class="mi">160</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p" data-group-id="7903836817-16">}</span><span class="p" data-group-id="7903836817-12">]</span><span class="p" data-group-id="7903836817-11">]</span><span class="p" data-group-id="7903836817-10">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="7903836817-1">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Topo</span><span class="o">.</span><span class="n">contains?</span><span class="p" data-group-id="7903836817-17">(</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="7903836817-18">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Polygon&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7903836817-19">[</span><span class="p" data-group-id="7903836817-20">[</span><span class="p" data-group-id="7903836817-21">{</span><span class="mi">160</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p" data-group-id="7903836817-21">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7903836817-22">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="7903836817-22">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7903836817-23">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">140</span><span class="p" data-group-id="7903836817-23">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7903836817-24">{</span><span class="mi">160</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p" data-group-id="7903836817-24">}</span><span class="p" data-group-id="7903836817-20">]</span><span class="p" data-group-id="7903836817-19">]</span><span class="p" data-group-id="7903836817-18">}</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="7903836817-25">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Polygon&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7903836817-26">[</span><span class="p" data-group-id="7903836817-27">[</span><span class="p" data-group-id="7903836817-28">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="7903836817-28">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7903836817-29">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">180</span><span class="p" data-group-id="7903836817-29">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7903836817-30">{</span><span class="mi">220</span><span class="p">,</span><span class="w"> </span><span class="mi">180</span><span class="p" data-group-id="7903836817-30">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7903836817-31">{</span><span class="mi">220</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="7903836817-31">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7903836817-32">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="7903836817-32">}</span><span class="p" data-group-id="7903836817-27">]</span><span class="p" data-group-id="7903836817-26">]</span><span class="p" data-group-id="7903836817-25">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="7903836817-17">)</span><span class="w">
+</span><span class="no">false</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="disjoint?/2">
+
+  <div class="detail-header">
+    <a href="#disjoint?/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">disjoint?(a, b)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> disjoint?(<a href="#t:geometry/0">geometry</a>(), <a href="#t:geometry/0">geometry</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Returns <code class="inline">true</code> if geometries <strong>A</strong> and <strong>B</strong> do not have any points in
+common.</p><h2 id="disjoint?/2-examples" class="section-heading">
+  <a href="#disjoint?/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Topo</span><span class="o">.</span><span class="n">disjoint?</span><span class="p" data-group-id="6016581529-1">(</span><span class="p" data-group-id="6016581529-2">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">3</span><span class="p" data-group-id="6016581529-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6016581529-3">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MultiPoint&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6016581529-4">[</span><span class="p" data-group-id="6016581529-5">{</span><span class="mi">70</span><span class="p">,</span><span class="w"> </span><span class="mi">35</span><span class="p" data-group-id="6016581529-5">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6016581529-6">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">80</span><span class="p" data-group-id="6016581529-6">}</span><span class="p" data-group-id="6016581529-4">]</span><span class="p" data-group-id="6016581529-3">}</span><span class="p" data-group-id="6016581529-1">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Topo</span><span class="o">.</span><span class="n">disjoint?</span><span class="p" data-group-id="6016581529-7">(</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="6016581529-8">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Polygon&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6016581529-9">[</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">    </span><span class="p" data-group-id="6016581529-10">[</span><span class="p" data-group-id="6016581529-11">{</span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="mi">120</span><span class="p" data-group-id="6016581529-11">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6016581529-12">{</span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="mi">40</span><span class="p" data-group-id="6016581529-12">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6016581529-13">{</span><span class="mi">160</span><span class="p">,</span><span class="w"> </span><span class="mi">40</span><span class="p" data-group-id="6016581529-13">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6016581529-14">{</span><span class="mi">160</span><span class="p">,</span><span class="w"> </span><span class="mi">120</span><span class="p" data-group-id="6016581529-14">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6016581529-15">{</span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="mi">120</span><span class="p" data-group-id="6016581529-15">}</span><span class="p" data-group-id="6016581529-10">]</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">    </span><span class="p" data-group-id="6016581529-16">[</span><span class="p" data-group-id="6016581529-17">{</span><span class="mi">140</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="6016581529-17">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6016581529-18">{</span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="6016581529-18">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6016581529-19">{</span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p" data-group-id="6016581529-19">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6016581529-20">{</span><span class="mi">140</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p" data-group-id="6016581529-20">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6016581529-21">{</span><span class="mi">140</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="6016581529-21">}</span><span class="p" data-group-id="6016581529-16">]</span><span class="p" data-group-id="6016581529-9">]</span><span class="p" data-group-id="6016581529-8">}</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="6016581529-22">%</span><span class="nc" data-group-id="6016581529-22">Geo.MultiPoint</span><span class="p" data-group-id="6016581529-22">{</span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6016581529-23">[</span><span class="p" data-group-id="6016581529-24">{</span><span class="mi">70</span><span class="p">,</span><span class="w"> </span><span class="mi">35</span><span class="p" data-group-id="6016581529-24">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6016581529-25">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">80</span><span class="p" data-group-id="6016581529-25">}</span><span class="p" data-group-id="6016581529-23">]</span><span class="p" data-group-id="6016581529-22">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="6016581529-7">)</span><span class="w">
+</span><span class="no">true</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="equals?/2">
+
+  <div class="detail-header">
+    <a href="#equals?/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">equals?(a, b)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> equals?(<a href="#t:geometry/0">geometry</a>(), <a href="#t:geometry/0">geometry</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Geometries <strong>A</strong> and <strong>B</strong> are equivalent and cover the exact
+same set of points.  By definition, <strong>A</strong> and <strong>B</strong> are equal if <strong>A</strong> contains
+<strong>B</strong> and <strong>B</strong> contains <strong>A</strong>.  Equality does not necessarily mean that the
+geometries are of the same type.  A Point <strong>A</strong> is equal to a MultiPoint that
+contains only the same Point <strong>A</strong>.</p><h2 id="equals?/2-examples" class="section-heading">
+  <a href="#equals?/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Topo</span><span class="o">.</span><span class="n">equals?</span><span class="p" data-group-id="3446204616-1">(</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="3446204616-2">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Point&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3446204616-3">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">3</span><span class="p" data-group-id="3446204616-3">}</span><span class="p" data-group-id="3446204616-2">}</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="3446204616-4">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MultiPoint&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3446204616-5">[</span><span class="p" data-group-id="3446204616-6">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">3</span><span class="p" data-group-id="3446204616-6">}</span><span class="p" data-group-id="3446204616-5">]</span><span class="p" data-group-id="3446204616-4">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="3446204616-1">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Topo</span><span class="o">.</span><span class="n">equals?</span><span class="p" data-group-id="3446204616-7">(</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="3446204616-8">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Polygon&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3446204616-9">[</span><span class="p" data-group-id="3446204616-10">[</span><span class="p" data-group-id="3446204616-11">{</span><span class="mi">160</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p" data-group-id="3446204616-11">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3446204616-12">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="3446204616-12">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3446204616-13">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">140</span><span class="p" data-group-id="3446204616-13">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3446204616-14">{</span><span class="mi">160</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p" data-group-id="3446204616-14">}</span><span class="p" data-group-id="3446204616-10">]</span><span class="p" data-group-id="3446204616-9">]</span><span class="p" data-group-id="3446204616-8">}</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="3446204616-15">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Polygon&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3446204616-16">[</span><span class="p" data-group-id="3446204616-17">[</span><span class="p" data-group-id="3446204616-18">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="3446204616-18">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3446204616-19">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">180</span><span class="p" data-group-id="3446204616-19">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3446204616-20">{</span><span class="mi">220</span><span class="p">,</span><span class="w"> </span><span class="mi">180</span><span class="p" data-group-id="3446204616-20">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3446204616-21">{</span><span class="mi">220</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="3446204616-21">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3446204616-22">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="3446204616-22">}</span><span class="p" data-group-id="3446204616-17">]</span><span class="p" data-group-id="3446204616-16">]</span><span class="p" data-group-id="3446204616-15">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="3446204616-7">)</span><span class="w">
+</span><span class="no">false</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="intersects?/2">
+
+  <div class="detail-header">
+    <a href="#intersects?/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">intersects?(a, b)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> intersects?(<a href="#t:geometry/0">geometry</a>(), <a href="#t:geometry/0">geometry</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Returns <code class="inline">true</code> if geometries <strong>A</strong> and <strong>B</strong> share at least one point in
+common.</p><h2 id="intersects?/2-examples" class="section-heading">
+  <a href="#intersects?/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Topo</span><span class="o">.</span><span class="n">intersects?</span><span class="p" data-group-id="5947121772-1">(</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="5947121772-2">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Polygon&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5947121772-3">[</span><span class="p" data-group-id="5947121772-4">[</span><span class="p" data-group-id="5947121772-5">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="5947121772-5">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5947121772-6">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="5947121772-6">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5947121772-7">{</span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p" data-group-id="5947121772-7">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5947121772-8">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p" data-group-id="5947121772-8">}</span><span class="p" data-group-id="5947121772-4">]</span><span class="p" data-group-id="5947121772-3">]</span><span class="p" data-group-id="5947121772-2">}</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="5947121772-9">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;LineString&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5947121772-10">[</span><span class="p" data-group-id="5947121772-11">{</span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="5947121772-11">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5947121772-12">{</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mf">2.5</span><span class="p" data-group-id="5947121772-12">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5947121772-13">{</span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="mf">2.5</span><span class="p" data-group-id="5947121772-13">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5947121772-14">{</span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p" data-group-id="5947121772-14">}</span><span class="p" data-group-id="5947121772-10">]</span><span class="p" data-group-id="5947121772-9">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="5947121772-1">)</span><span class="w">
+</span><span class="no">true</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Topo</span><span class="o">.</span><span class="n">intersects?</span><span class="p" data-group-id="5947121772-15">(</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="5947121772-16">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Polygon&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5947121772-17">[</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">    </span><span class="p" data-group-id="5947121772-18">[</span><span class="p" data-group-id="5947121772-19">{</span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="mi">120</span><span class="p" data-group-id="5947121772-19">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5947121772-20">{</span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="mi">40</span><span class="p" data-group-id="5947121772-20">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5947121772-21">{</span><span class="mi">160</span><span class="p">,</span><span class="w"> </span><span class="mi">40</span><span class="p" data-group-id="5947121772-21">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5947121772-22">{</span><span class="mi">160</span><span class="p">,</span><span class="w"> </span><span class="mi">120</span><span class="p" data-group-id="5947121772-22">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5947121772-23">{</span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="mi">120</span><span class="p" data-group-id="5947121772-23">}</span><span class="p" data-group-id="5947121772-18">]</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">    </span><span class="p" data-group-id="5947121772-24">[</span><span class="p" data-group-id="5947121772-25">{</span><span class="mi">140</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="5947121772-25">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5947121772-26">{</span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="5947121772-26">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5947121772-27">{</span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p" data-group-id="5947121772-27">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5947121772-28">{</span><span class="mi">140</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p" data-group-id="5947121772-28">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5947121772-29">{</span><span class="mi">140</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p" data-group-id="5947121772-29">}</span><span class="p" data-group-id="5947121772-24">]</span><span class="p" data-group-id="5947121772-17">]</span><span class="p" data-group-id="5947121772-16">}</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="5947121772-30">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MultiPoint&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5947121772-31">[</span><span class="p" data-group-id="5947121772-32">{</span><span class="mi">70</span><span class="p">,</span><span class="w"> </span><span class="mi">35</span><span class="p" data-group-id="5947121772-32">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5947121772-33">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">80</span><span class="p" data-group-id="5947121772-33">}</span><span class="p" data-group-id="5947121772-31">]</span><span class="p" data-group-id="5947121772-30">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="5947121772-15">)</span><span class="w">
+</span><span class="no">false</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="within?/2">
+
+  <div class="detail-header">
+    <a href="#within?/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">within?(a, b)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> within?(<a href="#t:geometry/0">geometry</a>(), <a href="#t:geometry/0">geometry</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>This is the direct converse of <code class="inline">contains?</code>.  All points of
+geometry <strong>A</strong> lie within geometry <strong>B</strong>.</p><h2 id="within?/2-examples" class="section-heading">
+  <a href="#within?/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">Topo</span><span class="o">.</span><span class="n">within?</span><span class="p" data-group-id="2062050189-1">(</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="2062050189-2">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Polygon&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2062050189-3">[</span><span class="p" data-group-id="2062050189-4">[</span><span class="p" data-group-id="2062050189-5">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="2062050189-5">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2062050189-6">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">180</span><span class="p" data-group-id="2062050189-6">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2062050189-7">{</span><span class="mi">220</span><span class="p">,</span><span class="w"> </span><span class="mi">180</span><span class="p" data-group-id="2062050189-7">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2062050189-8">{</span><span class="mi">220</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="2062050189-8">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2062050189-9">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="2062050189-9">}</span><span class="p" data-group-id="2062050189-4">]</span><span class="p" data-group-id="2062050189-3">]</span><span class="p" data-group-id="2062050189-2">}</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="2062050189-10">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Polygon&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2062050189-11">[</span><span class="p" data-group-id="2062050189-12">[</span><span class="p" data-group-id="2062050189-13">{</span><span class="mi">160</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p" data-group-id="2062050189-13">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2062050189-14">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="2062050189-14">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2062050189-15">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">140</span><span class="p" data-group-id="2062050189-15">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2062050189-16">{</span><span class="mi">160</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p" data-group-id="2062050189-16">}</span><span class="p" data-group-id="2062050189-12">]</span><span class="p" data-group-id="2062050189-11">]</span><span class="p" data-group-id="2062050189-10">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="2062050189-1">)</span><span class="w">
+</span><span class="no">false</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">Topo</span><span class="o">.</span><span class="n">within?</span><span class="p" data-group-id="2062050189-17">(</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="2062050189-18">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Polygon&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2062050189-19">[</span><span class="p" data-group-id="2062050189-20">[</span><span class="p" data-group-id="2062050189-21">{</span><span class="mi">160</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p" data-group-id="2062050189-21">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2062050189-22">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="2062050189-22">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2062050189-23">{</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">140</span><span class="p" data-group-id="2062050189-23">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2062050189-24">{</span><span class="mi">160</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p" data-group-id="2062050189-24">}</span><span class="p" data-group-id="2062050189-20">]</span><span class="p" data-group-id="2062050189-19">]</span><span class="p" data-group-id="2062050189-18">}</span><span class="p">,</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="w">  </span><span class="p" data-group-id="2062050189-25">%{</span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Polygon&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">coordinates</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2062050189-26">[</span><span class="p" data-group-id="2062050189-27">[</span><span class="p" data-group-id="2062050189-28">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="2062050189-28">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2062050189-29">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">180</span><span class="p" data-group-id="2062050189-29">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2062050189-30">{</span><span class="mi">220</span><span class="p">,</span><span class="w"> </span><span class="mi">180</span><span class="p" data-group-id="2062050189-30">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2062050189-31">{</span><span class="mi">220</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="2062050189-31">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="2062050189-32">{</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p" data-group-id="2062050189-32">}</span><span class="p" data-group-id="2062050189-27">]</span><span class="p" data-group-id="2062050189-26">]</span><span class="p" data-group-id="2062050189-25">}</span><span class="w">
+</span><span class="gp unselectable">...&gt; </span><span class="p" data-group-id="2062050189-17">)</span><span class="w">
+</span><span class="no">true</span></code></pre>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+      <footer class="footer">
+        <p>
+
+            <span class="line">
+              <a href="https://hex.pm/packages/topo/1.0.0" class="footer-hex-package">Hex Package</a>
+
+              <a href="https://preview.hex.pm/preview/topo/1.0.0">Hex Preview</a>
+
+                (<a href="https://preview.hex.pm/preview/topo/1.0.0/show/lib/topo.ex">current file</a>)
+
+            </span>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+              Search HexDocs
+            </button>
+
+              <a href="topo.epub" title="ePub version">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.29.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+
+
+  </body>
+</html>
