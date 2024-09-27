@@ -4,7 +4,7 @@ defmodule Topo.Mixfile do
   def project do
     [
       app: :topo,
-      version: "1.0.0",
+      version: "1.0.1",
       elixir: "~> 1.12",
       description: description(),
       package: package(),
