@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.0.2] - 2024-09-30
+
+### Changed
+
+- Fix warning about matching `0.0` vs `0`
+
 ## [1.0.1] - 2024-09-27
 
 ### Changed
