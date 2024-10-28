@@ -16,7 +16,7 @@ defmodule Topo.Contains do
           | %Geo.Polygon{}
           | %Geo.MultiPolygon{}
 
-  @spec contains?(geo_struct, geo_struct) :: boolean
+  @spec contains?(geo_struct | %Geo.GeometryCollection{}, geo_struct) :: boolean
   def contains?(%Geo.Point{} = a, %Geo.Point{} = b), do: a == b
   def contains?(%Geo.Point{} = a, %Geo.MultiPoint{} = b), do: contains_all?(a, b, Geo.Point)
   def contains?(%Geo.Point{}, _), do: false
@@ -24,6 +24,10 @@ defmodule Topo.Contains do
   def contains?(%Geo.MultiPoint{} = a, %Geo.Point{} = b), do: any_contain?(a, b, Geo.Point)
   def contains?(%Geo.MultiPoint{} = a, %Geo.MultiPoint{} = b), do: contains_all?(a, b, Geo.Point)
   def contains?(%Geo.MultiPoint{}, _), do: false
+
+  def contains?(%Geo.GeometryCollection{geometries: geometries}, b) do
+    Enum.any?(geometries, &contains?(&1, b))
+  end
 
   def contains?(%Geo.LineString{} = a, %Geo.Point{} = b) do
     cond do
