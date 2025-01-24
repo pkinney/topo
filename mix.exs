@@ -13,7 +13,15 @@ defmodule Topo.Mixfile do
       test_coverage: [tool: ExCoveralls],
       dialyzer: [plt_add_apps: [:poison, :mix]],
       deps: deps(),
-      aliases: aliases()
+      aliases: aliases(),
+
+      # Docs
+      name: "Topo",
+      docs: [
+        main: "Topo",
+        source_url: "https://github.com/pkinney/topo",
+        source_ref: "master"
+      ]
     ]
   end
 
